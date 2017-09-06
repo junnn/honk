@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Honk</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="drawer_news">News</string>
+    <string name="drawer_feeds">Feeds</string>
+    <string name="drawer_cameras">Cameras</string>
+    <string name="drawer_maps">Maps</string>
+    <string name="drawer_favourites">Favourites</string>
+    <string name="drawer_settings">Settings</string>
+</resources>
