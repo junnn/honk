@@ -17,7 +17,7 @@ public class NewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        getActivity().setTitle("DON TESTING");//set the title on the toolbar
+        getActivity().setTitle("News");//set the title on the toolbar
 
         return view;
     }
