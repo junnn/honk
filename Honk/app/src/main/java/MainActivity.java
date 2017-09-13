@@ -1,5 +1,3 @@
-package bloop.honk;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +16,7 @@ import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
 import bloop.honk.Fragments.SettingsFragment;
+import bloop.honk.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
