@@ -1,5 +1,8 @@
 package bloop.honk;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,22 +14,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SlidingDrawer;
+import android.widget.Toast;
 
 import bloop.honk.Fragments.CamerasFragment;
 import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
-import bloop.honk.Fragments.SettingsFragment;
-import bloop.honk.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private SharedPreferences sharedPreferences;
+    private Menu menu;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Creating a shared preference
+        sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -36,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         switchToSelectedFragment(R.id.nav_news);//the "default" page user will see upon logging in
@@ -59,20 +71,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -84,6 +83,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+            menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_login).setTitle("Log Out");
+        }
+        else{
+            menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_login).setTitle("Login");
+        }
     }
 
     private void switchToSelectedFragment(int itemId){
@@ -109,9 +120,29 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_favourites:
                 fragment = new FavouritesFragment();
                 break;
-            case R.id.nav_settings:
-                fragment = new SettingsFragment();
-                break;
+            case R.id.nav_login:
+                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+                    //Creating editor to store values to shared preferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    //Adding values to editor
+                    editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, false);
+                    editor.putString(Config.USERNAME_SHARED_PREF, "");
+                    //Saving values to editor
+                    editor.apply();
+
+                    menu = navigationView.getMenu();
+                    menu.findItem(R.id.nav_login).setTitle("Login");
+
+                    Toast.makeText(this, "Logged out...", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                else{
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    break;
+                }
+
         }
 
         //replacing the fragment

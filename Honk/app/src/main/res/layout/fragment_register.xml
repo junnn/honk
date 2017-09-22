@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:text="@string/register"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/username_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/username_hint"
+        android:background="@drawable/round_edit_text"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/textView"
+        android:layout_marginStart="82dp" />
+
+    <EditText
+        android:id="@+id/password_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:background="@drawable/round_edit_text"
+        android:inputType="textPassword"
+        android:hint="@string/password_hint"
+        android:layout_below="@+id/username_editText"
+        android:layout_alignStart="@+id/username_editText"
+        android:layout_marginTop="23dp" />
+
+    <EditText
+        android:id="@+id/confirm_password_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:background="@drawable/round_edit_text"
+        android:inputType="textPassword"
+        android:hint="@string/confirm_password"
+        android:layout_below="@+id/password_editText"
+        android:layout_alignStart="@+id/password_editText"
+        android:layout_marginTop="23dp" />
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
+        android:text="@string/register"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/confirm_password_editText"
+        android:layout_alignStart="@+id/confirm_password_editText"
+        android:layout_marginTop="18dp"
+        android:layout_alignEnd="@+id/confirm_password_editText" />
+
+</RelativeLayout>
