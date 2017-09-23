@@ -18,4 +18,6 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="xml_error">XML Error</string>
 </resources>
