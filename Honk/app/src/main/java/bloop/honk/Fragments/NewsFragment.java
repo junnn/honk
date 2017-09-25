@@ -23,7 +23,7 @@ import java.util.List;
 import bloop.honk.Fragments.XmlParser.Entry;
 import bloop.honk.R;
 
-public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListener{
+public class NewsFragment extends Fragment{
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
     List<XmlParser.Entry> entries;
@@ -35,23 +35,10 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         loadPage();
         //getActivity().setContentView(R.layout.sample_main);
 
-       // recyclerView = layout.findViewById(R.id.recycler);
+        recyclerView = layout.findViewById(R.id.recycler);
 
         return layout;
-
-
     }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new NewsAdapter(getActivity(), entries);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-    }
-
 
     private static final String URL =
             "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=10&category=2";
@@ -60,7 +47,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         new DownloadXmlTask().execute(URL);
     }
 
-    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
+    private class DownloadXmlTask extends AsyncTask<String, Void, String> implements NewsAdapter.ItemClickListener {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -82,8 +69,14 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
             //myWebView.loadData(result, "text/html", null);
 
             adapter = new NewsAdapter(getActivity(), entries);
+            adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+
+        @Override
+        public void onItemClick(View view, int position){
+            Toast.makeText(getActivity(),"Helloo" + adapter.getLink(position), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -127,8 +120,5 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         InputStream stream = conn.getInputStream();
         return stream;
     }
-    @Override
-    public void onItemClick(View view, int position){
-        Toast.makeText(getActivity(),"Helloo" + adapter.getLink(position), Toast.LENGTH_SHORT).show();
-    }
+
 }
