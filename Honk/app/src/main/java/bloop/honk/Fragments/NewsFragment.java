@@ -23,7 +23,7 @@ import java.util.List;
 import bloop.honk.Fragments.XmlParser.Entry;
 import bloop.honk.R;
 
-public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListener {
+public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListener{
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
     List<XmlParser.Entry> entries;
@@ -114,8 +114,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         InputStream stream = conn.getInputStream();
         return stream;
     }
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "You clicked " + adapter.getLink(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+
+    public void onItemClick(View view, int position){
+        Toast.makeText(getActivity(), adapter.getLink(position), Toast.LENGTH_LONG);
     }
 }
