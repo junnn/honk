@@ -35,15 +35,21 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         loadPage();
         //getActivity().setContentView(R.layout.sample_main);
 
-        recyclerView = layout.findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new NewsAdapter(getActivity(), entries);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+       // recyclerView = layout.findViewById(R.id.recycler);
 
         return layout;
 
 
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new NewsAdapter(getActivity(), entries);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
 
