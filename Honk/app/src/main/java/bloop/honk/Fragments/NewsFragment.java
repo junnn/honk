@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -22,9 +23,9 @@ import java.util.List;
 import bloop.honk.Fragments.XmlParser.Entry;
 import bloop.honk.R;
 
-public class NewsFragment extends Fragment{
+public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListener{
     private RecyclerView recyclerView;
-    private Adapter adapter;
+    private NewsAdapter adapter;
     List<XmlParser.Entry> entries;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class NewsFragment extends Fragment{
             //WebView myWebView = (WebView) findViewById(R.id.webview);
             //myWebView.loadData(result, "text/html", null);
 
-            adapter = new Adapter(getActivity(), entries);
+            adapter = new NewsAdapter(getActivity(), entries);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
@@ -112,5 +113,9 @@ public class NewsFragment extends Fragment{
         conn.connect();
         InputStream stream = conn.getInputStream();
         return stream;
+    }
+
+    public void onItemClick(View view, int position){
+        Toast.makeText(getActivity(), adapter.getLink(position), Toast.LENGTH_LONG);
     }
 }
