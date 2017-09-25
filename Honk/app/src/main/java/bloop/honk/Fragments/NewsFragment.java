@@ -117,8 +117,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         InputStream stream = conn.getInputStream();
         return stream;
     }
-
+    @Override
     public void onItemClick(View view, int position){
-        Toast.makeText(getActivity(), adapter.getLink(position), Toast.LENGTH_LONG);
+        Toast.makeText(getActivity(),"Helloo" + adapter.getLink(position), Toast.LENGTH_SHORT).show();
     }
 }

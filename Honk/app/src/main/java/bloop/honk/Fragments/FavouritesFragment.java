@@ -32,7 +32,7 @@ public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapte
         animalNames.add("Camel");
         animalNames.add("Sheep");
         animalNames.add("Goat");
-
+//
         // set up the RecyclerView
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rvAnimals);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
