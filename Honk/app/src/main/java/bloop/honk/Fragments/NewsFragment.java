@@ -27,6 +27,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
     List<XmlParser.Entry> entries;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_news, container, false);
@@ -35,7 +36,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         //getActivity().setContentView(R.layout.sample_main);
 
         recyclerView = layout.findViewById(R.id.recycler);
-
+        adapter = new NewsAdapter(getActivity(), entries);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 
         return layout;
     }
