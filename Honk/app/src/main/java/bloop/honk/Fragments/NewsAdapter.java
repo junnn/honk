@@ -17,18 +17,18 @@ import bloop.honk.R;
  * Created by Don on 2017/09/23.
  */
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
-    private LayoutInflater inflater;
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
     List<XmlParser.Entry> data = Collections.emptyList();
+    private LayoutInflater inflater;
+    private ItemClickListener mClickListener;
 
-    public Adapter(Context context, List<XmlParser.Entry> data){
+    public NewsAdapter(Context context, List<XmlParser.Entry> data){
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = inflater.inflate(R.layout.row, parent,false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
@@ -47,7 +47,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView desc;
         TextView date;
@@ -56,6 +56,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             title = itemView.findViewById(R.id.listText);
             desc = itemView.findViewById(R.id.descText);
             date = itemView.findViewById(R.id.dateText);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        }
+
+    }
+
+    //public XMLParser.entry getItem(int id) {
+    //    return data.get(id);
+    //}
+
+    public String getLink(int id){
+        return data.get(id).getLink();
+    }
+
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }
