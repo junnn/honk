@@ -36,12 +36,16 @@ public class NewsFragment extends Fragment implements NewsAdapter.ItemClickListe
         //getActivity().setContentView(R.layout.sample_main);
 
         recyclerView = layout.findViewById(R.id.recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new NewsAdapter(getActivity(), entries);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         return layout;
+
+
     }
+
 
     private static final String URL =
             "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=10&category=2";
