@@ -1,5 +1,7 @@
 package bloop.honk.Fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -19,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import bloop.honk.Fragments.XmlParser.Entry;
 import bloop.honk.R;
@@ -26,6 +31,7 @@ import bloop.honk.R;
 public class NewsFragment extends Fragment{
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
+    WebView myWebView;
     List<XmlParser.Entry> entries;
 
     @Override
@@ -58,16 +64,10 @@ public class NewsFragment extends Fragment{
             } catch (XmlPullParserException e) {
                 return getResources().getString(R.string.xml_error);
             }
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-            //setContentView(R.layout.main);
-            // Displays the HTML string in the UI via a WebView
-            //WebView myWebView = (WebView) findViewById(R.id.webview);
-            //myWebView.loadData(result, "text/html", null);
-
             adapter = new NewsAdapter(getActivity(), entries);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
@@ -76,7 +76,13 @@ public class NewsFragment extends Fragment{
 
         @Override
         public void onItemClick(View view, int position){
-            Toast.makeText(getActivity(),"Helloo" + adapter.getLink(position), Toast.LENGTH_SHORT).show();
+            String url = "http://"+adapter.getLink(position);
+            Log.i("WEBVIEW",url);
+
+            myWebView = (WebView) getView().findViewById(R.id.webview);
+
+            myWebView.loadUrl(url);
+            myWebView.setWebViewClient(new WebViewClient());
         }
     }
 
