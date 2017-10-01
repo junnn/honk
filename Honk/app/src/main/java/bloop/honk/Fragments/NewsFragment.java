@@ -53,7 +53,7 @@ public class NewsFragment extends Fragment{
         new DownloadXmlTask().execute(URL);
     }
 
-    private class DownloadXmlTask extends AsyncTask<String, Void, String> implements NewsAdapter.ItemClickListener {
+    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -69,21 +69,11 @@ public class NewsFragment extends Fragment{
         @Override
         protected void onPostExecute(String result) {
             adapter = new NewsAdapter(getActivity(), entries);
-            adapter.setClickListener(this);
+            //adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        @Override
-        public void onItemClick(View view, int position){
-            String url = "http://"+adapter.getLink(position);
-            Log.i("WEBVIEW",url);
-
-            myWebView = (WebView) getView().findViewById(R.id.webview);
-
-            myWebView.loadUrl(url);
-            myWebView.setWebViewClient(new WebViewClient());
-        }
     }
 
     private String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {

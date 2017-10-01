@@ -1,7 +1,9 @@
 package bloop.honk.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import bloop.honk.NewsDetails;
 import bloop.honk.R;
 
 /**
@@ -18,6 +21,7 @@ import bloop.honk.R;
  */
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
+    Context context;
     List<XmlParser.Entry> data = Collections.emptyList();
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
@@ -25,6 +29,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     public NewsAdapter(Context context, List<XmlParser.Entry> data){
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.context=context;
     }
 
     @Override
@@ -36,10 +41,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        XmlParser.Entry current = data.get(position);
+        final XmlParser.Entry current = data.get(position);
         holder.title.setText(current.title);
         holder.desc.setText(current.summary);
         holder.date.setText(current.pubDate);
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(context, NewsDetails.class);
+                String url = "http://"+current.getLink();
+                //Log.i("WEBVIEW",url);
+                intent.putExtra("Link", url);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
