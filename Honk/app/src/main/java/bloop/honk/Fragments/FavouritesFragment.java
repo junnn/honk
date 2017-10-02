@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bloop.honk.Bookmark;
 import bloop.honk.Post;
 import bloop.honk.R;
 
@@ -30,16 +31,17 @@ import bloop.honk.R;
  */
 
 public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
-
-    private static final String ENDPOINT = "https://kylewbanks.com/rest/posts.json";
-    private static List<Post> posts;
+    private static final String ENDPOINT = "http://172.21.148.166/example/fetchbookmark.php/?username=admin";
+    private static List<Bookmark> posts;
     private static ArrayList<String> test = new ArrayList<>();
     private Gson gson;
+    private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     MyRecyclerViewAdapter adapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setTitle("Doggie");
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
         requestQueue = Volley.newRequestQueue(getActivity());
@@ -48,19 +50,7 @@ public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapte
         gson = gsonBuilder.create();
         fetchPosts();
         // data to populate the RecyclerView with
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-//
-        // set up the RecyclerView
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MyRecyclerViewAdapter(getActivity(),test);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
         return rootView;
     }
 
@@ -72,12 +62,16 @@ public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapte
     private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            posts = Arrays.asList(gson.fromJson(response, Post[].class));
+            posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
             Log.i("PostActivity", posts.size() + " posts loaded.");
-            for (Post post : posts) {
-                test.add(post.title);
-                Log.i("PostActivity", post.ID + ": " + post.title);
+            for (Bookmark bookmark : posts) {
+                test.add(bookmark.name);
+                //Log.i("PostActivity", post.ID + ": " + post.title);
             }
+            adapter = new MyRecyclerViewAdapter(getActivity(),test);
+            recyclerView.setAdapter(adapter);
+            //adapter.setClickListener(this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     };
 

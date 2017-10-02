@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Bookmark {
     @SerializedName("favourite")
-    long name;
+    public String name;
 
     String longitude;
     String latitude;
