@@ -28,7 +28,7 @@ import bloop.honk.R;
 public class FeedsFragment extends Fragment {
     private Gson gson;
 
-    private static final String ENDPOINT = "https://kylewbanks.com/rest/posts.json";
+    private static final String ENDPOINT = "http://172.21.148.166/example/trafficfeed.php";
 
     private RequestQueue requestQueue;
 
@@ -61,7 +61,7 @@ public class FeedsFragment extends Fragment {
 
             Log.i("PostActivity", posts.size() + " posts loaded.");
             for (FeedItem feedItem : posts) {
-                Log.i("PostActivity", feedItem.ID + ": " + feedItem.title);
+                Log.i("PostActivity", feedItem.type + ": " + feedItem.message);
             }
         }
 
