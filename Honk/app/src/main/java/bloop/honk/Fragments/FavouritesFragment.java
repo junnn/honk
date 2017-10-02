@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import bloop.honk.Bookmark;
-import bloop.honk.Post;
 import bloop.honk.R;
 
 /**
