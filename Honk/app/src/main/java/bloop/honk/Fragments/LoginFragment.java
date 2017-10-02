@@ -1,6 +1,5 @@
 package bloop.honk.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class LoginFragment extends Fragment {
 
     //login function
     private void login(String username, String password){
-        //Post request
+        //FeedItem request
         boolean response = true;
 
         if(response){
