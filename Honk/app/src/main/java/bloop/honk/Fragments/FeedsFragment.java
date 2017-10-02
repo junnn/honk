@@ -21,6 +21,8 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 import java.util.List;
 
+import bloop.honk.FeedsComponents.FeedItem;
+import bloop.honk.FeedsComponents.FeedsAdapter;
 import bloop.honk.R;
 
 /**
@@ -70,11 +72,11 @@ public class FeedsFragment extends Fragment {
             posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
 
             Log.i("PostActivity", posts.size() + " posts loaded.");
-            for (FeedItem feedItem : posts) {
+            /*for (FeedItem feedItem : posts) {
                 String date_time = feedItem.message.substring(0,feedItem.message.indexOf(' ')); // "72"
                 String msg = feedItem.message.substring(feedItem.message.indexOf(' ')+1);
                 Log.i("PostActivity", feedItem.type+":"+date_time + ": " + msg);
-            }
+            }*/
 
                 adapter = new FeedsAdapter(getActivity(), posts);
                 //adapter.setClickListener(this);

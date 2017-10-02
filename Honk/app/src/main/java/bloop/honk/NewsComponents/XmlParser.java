@@ -1,4 +1,4 @@
-package bloop.honk.Fragments;
+package bloop.honk.NewsComponents;
 
 import android.util.Log;
 import android.util.Xml;

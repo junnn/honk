@@ -1,19 +1,14 @@
 package bloop.honk.Fragments;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -21,11 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
-import bloop.honk.Fragments.XmlParser.Entry;
+import bloop.honk.NewsComponents.NewsAdapter;
+import bloop.honk.NewsComponents.XmlParser;
 import bloop.honk.R;
 
 public class NewsFragment extends Fragment{

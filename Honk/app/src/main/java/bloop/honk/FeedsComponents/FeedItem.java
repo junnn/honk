@@ -1,4 +1,4 @@
-package bloop.honk.Fragments;
+package bloop.honk.FeedsComponents;
 
 public class FeedItem {
 
