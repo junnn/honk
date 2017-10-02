@@ -6,5 +6,6 @@ public class FeedItem {
     String latitude;
     String longtitude;
     String message;
+    //String date_time = message.substring(15);
 
 }

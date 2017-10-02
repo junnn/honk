@@ -36,14 +36,14 @@ public class NewsFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_news, container, false);
+        View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
         loadPage();
         //getActivity().setContentView(R.layout.sample_main);
 
-        recyclerView = layout.findViewById(R.id.recycler);
+        recyclerView = view.findViewById(R.id.recycler);
 
-        return layout;
+        return view;
     }
 
     private static final String URL =

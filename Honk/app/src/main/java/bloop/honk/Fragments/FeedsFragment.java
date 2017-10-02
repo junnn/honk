@@ -2,6 +2,8 @@ package bloop.honk.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +28,24 @@ import bloop.honk.R;
  */
 
 public class FeedsFragment extends Fragment {
+    public List<FeedItem> posts;
+
     private Gson gson;
 
     private static final String ENDPOINT = "http://172.21.148.166/example/trafficfeed.php";
 
     private RequestQueue requestQueue;
 
+    private RecyclerView recyclerView;
+
+    private FeedsAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feeds, container, false);
         getActivity().setTitle("Feeds");//set the title on the toolbar
+
+        recyclerView = view.findViewById(R.id.feedrecycler);
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
@@ -57,12 +67,20 @@ public class FeedsFragment extends Fragment {
 
         @Override
         public void onResponse(String response) {
-            List<FeedItem> posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
+            posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
 
             Log.i("PostActivity", posts.size() + " posts loaded.");
             for (FeedItem feedItem : posts) {
-                Log.i("PostActivity", feedItem.type + ": " + feedItem.message);
+                String date_time = feedItem.message.substring(0,feedItem.message.indexOf(' ')); // "72"
+                String msg = feedItem.message.substring(feedItem.message.indexOf(' ')+1);
+                Log.i("PostActivity", feedItem.type+":"+date_time + ": " + msg);
             }
+
+                adapter = new FeedsAdapter(getActivity(), posts);
+                //adapter.setClickListener(this);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         }
 
     };
