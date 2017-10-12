@@ -1,5 +1,6 @@
 package bloop.honk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
         // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
         ft.replace(R.id.login_frame_container, fragment);
         ft.commit();
-
     }
 
 }

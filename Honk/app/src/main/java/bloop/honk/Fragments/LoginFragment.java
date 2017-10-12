@@ -1,6 +1,7 @@
 package bloop.honk.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import bloop.honk.Config;
 import bloop.honk.R;
@@ -77,26 +89,51 @@ public class LoginFragment extends Fragment {
     }
 
     //login function
-    private void login(String username, String password){
-        //FeedItem request
-        boolean response = true;
+    private void login(final String username, final String password){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 
-        if(response){
-            //Creating editor to store values to shared preferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+                        //If we are getting success from server
+                        if(response.equalsIgnoreCase("failure")){
+                            Toast.makeText(getContext(), "Invalid username/ password", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            //Creating editor to store values to shared preferences
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            //Adding values to editor
-            editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
-            editor.putString(Config.USERNAME_SHARED_PREF, username);
-            //Saving values to editor
-            editor.apply();
+                            //Adding values to editor
+                            editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
+                            editor.putString(Config.USERNAME_SHARED_PREF, username);
+                            editor.putString(Config.ROLE_SHARED_PREF, response);
+                            //Saving values to editor
+                            editor.apply();
 
-            Toast.makeText(getActivity(), "Success" +  sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""), Toast.LENGTH_SHORT).show();
-            getActivity().finish();
-        }
-        else{
-            Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
-        }
+                            Toast.makeText(getActivity(), "Successfully login", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //You can handle error here if you want
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                //Adding parameters to request
+                params.put(Config.TAG_USERNAME, username);
+                params.put(Config.TAG_PASSWORD, password);
+
+                return params; //return params to string request
+            }
+        };
+        //Adding the string request to the queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());//this is the login request.
+        requestQueue.add(stringRequest);
     }
-
 }
+

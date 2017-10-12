@@ -1,4 +1,6 @@
 package bloop.honk.Fragments;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bloop.honk.Bookmark;
+import bloop.honk.Config;
 import bloop.honk.R;
 
 /**
@@ -37,19 +40,31 @@ public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapte
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     MyRecyclerViewAdapter adapter;
+    private SharedPreferences sharedPreferences;
+    private String username;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Doggie");
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
-        requestQueue = Volley.newRequestQueue(getActivity());
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
-        fetchPosts();
-        // data to populate the RecyclerView with
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
+
+        sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
+            Toast.makeText(getContext(), "Please login to access your favourties", Toast.LENGTH_LONG).show();
+        }
+        else{
+            username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
+
+            requestQueue = Volley.newRequestQueue(getActivity());
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+            gson = gsonBuilder.create();
+            fetchPosts();
+            // data to populate the RecyclerView with
+            recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
+        }
         return rootView;
     }
 

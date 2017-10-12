@@ -1,5 +1,6 @@
 package bloop.honk;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,16 @@ import android.view.View;
 import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import bloop.honk.Fragments.CamerasFragment;
 import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
@@ -30,11 +41,15 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private Menu menu;
     private NavigationView navigationView;
+    static final int LOGIN_REGISTER_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //handle SSLHandshakeException due to Self-signed server certificate
+        handleSSLHandshake();
 
         //Creating a shared preference
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -90,6 +105,13 @@ public class MainActivity extends AppCompatActivity
         if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Log Out");
+
+            Fragment fragment = new NewsFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
+            ft.replace(R.id.main_frame_container, fragment);
+            ft.commit();
         }
         else{
             menu = navigationView.getMenu();
@@ -121,13 +143,14 @@ public class MainActivity extends AppCompatActivity
                 fragment = new FavouritesFragment();
                 break;
             case R.id.nav_login:
-                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){//if LOGGEDIN == true
                     //Creating editor to store values to shared preferences
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                    //Adding values to editor
+                    //clear values of editor
                     editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, false);
                     editor.putString(Config.USERNAME_SHARED_PREF, "");
+                    editor.putString(Config.ROLE_SHARED_PREF, "");
                     //Saving values to editor
                     editor.apply();
 
@@ -135,11 +158,12 @@ public class MainActivity extends AppCompatActivity
                     menu.findItem(R.id.nav_login).setTitle("Login");
 
                     Toast.makeText(this, "Logged out...", Toast.LENGTH_SHORT).show();
+                    fragment = new NewsFragment();
                     break;
                 }
                 else{
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, LOGIN_REGISTER_REQUEST_CODE);
                     break;
                 }
 
@@ -153,4 +177,38 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
     }
+
+    /**
+     * Enables https connections
+     */
+    @SuppressLint("TrulyRandom")
+    public static void handleSSLHandshake() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String arg0, SSLSession arg1) {
+                    return true;
+                }
+            });
+        } catch (Exception ignored) {
+        }
+    }
+
 }
