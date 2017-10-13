@@ -32,7 +32,7 @@ import bloop.honk.R;
  * Created by Jun Hao Ng on 6/9/2017.
  */
 
-public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
+public class FavouritesFragment extends Fragment {
     private static final String ENDPOINT = "http://172.21.148.166/example/fetchbookmark.php/?username=admin";
     private static List<Bookmark> posts;
     private static ArrayList<String> test = new ArrayList<>();
