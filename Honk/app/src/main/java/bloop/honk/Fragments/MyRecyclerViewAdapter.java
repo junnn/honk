@@ -57,6 +57,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             super(itemView);
             myTextView = (TextView) itemView.findViewById(R.id.tvAnimalName);
             favIB = (ImageButton) itemView.findViewById(R.id.favImageButton);
+            favIB.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
