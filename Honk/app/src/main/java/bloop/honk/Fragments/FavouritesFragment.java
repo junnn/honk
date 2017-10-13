@@ -84,7 +84,18 @@ public class FavouritesFragment extends Fragment implements MyRecyclerViewAdapte
             }
             adapter = new MyRecyclerViewAdapter(getActivity(),test);
             recyclerView.setAdapter(adapter);
-            //adapter.setClickListener(this);
+            adapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    switch(view.getId()) {
+                        case R.id.favImageButton:
+                            Toast.makeText(getActivity(), "You clicked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+                            break;
+                        default: // NAVIGATION, i will do it just leave this portion alone
+                            Toast.makeText(getActivity(), "You clicked ItemList " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     };
