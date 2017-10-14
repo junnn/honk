@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(ViewHolder holder, int position) {
         String animal = mData.get(position);
         holder.myTextView.setText(animal);
-        holder.favIB.setImageResource(R.drawable.stars);
+        //holder.favIB.setImageResource(R.drawable.favstar);
     }
 
     // total number of rows
@@ -51,12 +52,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView myTextView;
-        public ImageButton favIB;
+        public CheckBox favIB;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.tvAnimalName);
-            favIB = (ImageButton) itemView.findViewById(R.id.favImageButton);
+            myTextView = (TextView) itemView.findViewById(R.id.bookmarkContent);
+            favIB = (CheckBox) itemView.findViewById(R.id.favImageButton);
             favIB.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }

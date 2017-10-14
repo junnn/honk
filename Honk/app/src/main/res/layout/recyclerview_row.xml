@@ -8,23 +8,18 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/tvAnimalName"
+        android:id="@+id/bookmarkContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text=""/>
 
-    <ImageButton
+    <CheckBox
         android:id="@+id/favImageButton"
-        style="@android:style/Widget.Holo.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:checked="false"
-        android:scaleType="centerCrop"
-        android:src="@drawable/stars"
-        android:visibility="visible" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:button="@drawable/favstar" />
 
 </RelativeLayout>

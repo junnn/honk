@@ -45,13 +45,13 @@ public class FavouritesFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Doggie");
+        getActivity().setTitle("Favourites");
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
 
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
+        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, true)) {//if LOGGEDIN == false
             Toast.makeText(getContext(), "Please login to access your favourties", Toast.LENGTH_LONG).show();
         }
         else{
@@ -106,9 +106,9 @@ public class FavouritesFragment extends Fragment {
             Log.e("PostActivity", error.toString());
         }
     };
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-}
+    //@Override
+    //public void onItemClick(View view, int position) {
+       //Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+//}
 }
 
