@@ -21,11 +21,11 @@ import bloop.honk.R;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
     Context context;
-    List<XmlParser.Entry> data = Collections.emptyList();
+    List<Entry> data = Collections.emptyList();
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
-    public NewsAdapter(Context context, List<XmlParser.Entry> data){
+    public NewsAdapter(Context context, List<Entry> data){
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context=context;
@@ -40,10 +40,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final XmlParser.Entry current = data.get(position);
+        final Entry current = data.get(position);
         holder.title.setText(current.title);
         holder.desc.setText(current.summary);
         holder.date.setText(current.pubDate);
+        //holder.type.setText(current.news_type);
+
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -65,11 +67,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         TextView title;
         TextView desc;
         TextView date;
+        //TextView type;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.listText);
             desc = itemView.findViewById(R.id.descText);
             date = itemView.findViewById(R.id.dateText);
+            //type = itemView.findViewById(R.id.news_type);
             itemView.setOnClickListener(this);
         }
 
@@ -79,10 +84,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         }
 
     }
-
-    //public XMLParser.entry getItem(int id) {
-    //    return data.get(id);
-    //}
 
     public String getLink(int id){
         return data.get(id).getLink();

@@ -18,30 +18,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import bloop.honk.NewsComponents.Entry;
 import bloop.honk.NewsComponents.NewsAdapter;
 import bloop.honk.NewsComponents.XmlParser;
 import bloop.honk.R;
 
 public class NewsFragment extends Fragment{
+    private static final String URL = "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=20&category=1&category=2&category=3";
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
-    WebView myWebView;
-    List<XmlParser.Entry> entries;
+
+    List<Entry> entries;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
+
         loadPage();
-        //getActivity().setContentView(R.layout.sample_main);
 
         recyclerView = view.findViewById(R.id.recycler);
 
         return view;
     }
-
-    private static final String URL =
-            "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=10&category=2";
 
     private void loadPage() {
         new DownloadXmlTask().execute(URL);
@@ -74,24 +73,18 @@ public class NewsFragment extends Fragment{
         InputStream stream = null;
         XmlParser XmlParser = new XmlParser();
         entries = null;
-        String title = null;
-        String url = null;
-        String summary = null;
 
         try {
             stream = downloadUrl(urlString);
             entries = XmlParser.parse(stream);
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
-           // for (Entry entry : entries) {
-            //    Log.i("Entry", entry.getLink());
-           // }
         }
-        //catch (Exception e){
-        //    e.printStackTrace();
-        //}
+        catch (Exception e){
+            e.printStackTrace();
+        }
         finally {
             if (stream != null) {
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
                 stream.close();
             }
         }

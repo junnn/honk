@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import bloop.honk.R;
@@ -44,8 +46,15 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
 
         String date_time = current.message.substring(0,current.message.indexOf(' '));
 
-        holder.date.setText(date_time);
-
+        SimpleDateFormat spf = new SimpleDateFormat("(dd/MM)hh:mm");
+        try {
+            Date newDate = spf.parse(date_time);
+            spf = new SimpleDateFormat("dd MMM hh:mm a");
+            date_time = spf.format(newDate);
+            holder.date.setText(date_time);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
