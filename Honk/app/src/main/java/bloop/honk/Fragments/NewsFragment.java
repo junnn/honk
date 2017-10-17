@@ -1,5 +1,6 @@
 package bloop.honk.Fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,10 +44,16 @@ public class NewsFragment extends Fragment{
     }
 
     private void loadPage() {
-        new DownloadXmlTask().execute(URL);
+        new DownloadXmlTask(getActivity()).execute(URL);
     }
 
     private class DownloadXmlTask extends AsyncTask<String, Void, String> {
+
+        private Context context;
+
+        public DownloadXmlTask(Context context){
+            this.context = context;
+        }
 
         @Override
         protected String doInBackground(String... urls) {
@@ -61,7 +68,7 @@ public class NewsFragment extends Fragment{
 
         @Override
         protected void onPostExecute(String result) {
-            adapter = new NewsAdapter(getActivity(), entries);
+            adapter = new NewsAdapter(context, entries);
             //adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
