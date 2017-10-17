@@ -1,14 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/addressET"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Maps Fragment"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:maxLines="1"
+        android:background="@drawable/search_edittext_border"
+        android:textColorHint="@color/grey"
+        android:hint="Enter Address Here"
+        android:textColor="@android:color/primary_text_light"
+        android:paddingRight="40dp"
+        android:inputType="text"
+        android:ems="10"
+        android:paddingLeft="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:enabled="false"
+        android:layout_alignBottom="@+id/imageForETImageView" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageForETImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/ic_search"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/crossImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/ic_cross"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <bloop.honk.MapComponents.MapWrapperLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity"
+        android:layout_below="@+id/imageForETImageView">
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:name="bloop.honk.Fragments.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </bloop.honk.MapComponents.MapWrapperLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/locationResultRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 
 </RelativeLayout>
+
+
+

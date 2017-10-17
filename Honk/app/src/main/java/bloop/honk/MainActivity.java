@@ -1,11 +1,15 @@
 package bloop.honk;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,11 +17,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SlidingDrawer;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -34,6 +45,7 @@ import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
+import bloop.honk.MapComponents.GetAddress;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +54,8 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
     private NavigationView navigationView;
     static final int LOGIN_REGISTER_REQUEST_CODE = 1;
+    private final int REQUEST_CHECK_SETTINGS = 101;
+    private MapFragment mapfrag = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +135,6 @@ public class MainActivity extends AppCompatActivity
 
     private void switchToSelectedFragment(int itemId){
 
-
         //creating fragment object
         Fragment fragment = null;
 
@@ -138,6 +151,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_maps:
                 fragment = new MapFragment();
+                mapfrag = (MapFragment) fragment;
                 break;
             case R.id.nav_favourites:
                 fragment = new FavouritesFragment();
@@ -208,6 +222,29 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         } catch (Exception ignored) {
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_CANCELED && data !=null){
+            switch (requestCode) {
+                // Check for the integer request code originally supplied to startResolutionForResult().
+                case REQUEST_CHECK_SETTINGS:
+                    switch (resultCode) {
+                        case Activity.RESULT_OK:
+                            mapfrag.setPermissionGranted(true);
+                            mapfrag.requestLocationUpdates();
+                            // Set up autoCompletePlaces here
+                            mapfrag.setupAutoCompletePlaces();
+                            break;
+                    }
+                    break;
+            }
+        } else {
+            mapfrag.setPermissionGranted(false);
+            Toast.makeText(this, "This application requires LocationInfo Service to be turned on!", Toast.LENGTH_LONG).show();
         }
     }
 
