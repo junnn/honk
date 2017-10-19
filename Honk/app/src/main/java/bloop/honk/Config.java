@@ -14,9 +14,9 @@ public class Config {
     public static final String NAME_SHARED_PREF = "name";
 
     //URL to register.php
-    public static final String REGISTER_URL = "https://172.21.148.166/example/register.php";
+    public static final String REGISTER_URL = "https://172.21.148.166/example/dao/Hookdaoimpl.php?function=register";
     //URL to register.php
-    public static final String LOGIN_URL = "https://172.21.148.166/example/login.php";
+    public static final String LOGIN_URL = "https://172.21.148.166/example/dao/Hookdaoimpl.php?function=login";
 
     //JSON TAGS WHEN PARSING LOGIN & REGISTER REQUEST
     public static final String TAG_USERNAME = "username";

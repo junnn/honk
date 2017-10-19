@@ -74,7 +74,6 @@ public class RegisterFragment extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Toast.makeText(getContext(), "=>" +response, Toast.LENGTH_SHORT).show();
                             if (response.equals("success")) {
                                 //Creating editor to store values to shared preferences
                                 SharedPreferences.Editor editor = sharedPreferences.edit();

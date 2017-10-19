@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private Menu menu;
     private NavigationView navigationView;
-    static final int LOGIN_REGISTER_REQUEST_CODE = 1;
     private final int REQUEST_CHECK_SETTINGS = 101;
     private MapFragment mapfrag = null;
 
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else{
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, LOGIN_REGISTER_REQUEST_CODE);
+                    startActivity(intent);
                     break;
                 }
 
@@ -243,7 +242,9 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         } else {
-            mapfrag.setPermissionGranted(false);
+            if(mapfrag != null){
+                mapfrag.setPermissionGranted(false);
+            }
             Toast.makeText(this, "This application requires LocationInfo Service to be turned on!", Toast.LENGTH_LONG).show();
         }
     }
