@@ -23,7 +23,7 @@ import bloop.honk.R;
  * Created by Chiang on 16/10/2017.
  */
 
-public class GetAddress extends AsyncTask<String, String, String> {
+public class GetAddress extends AsyncTask<String, String, LocationInfo> {
     private Activity context;
     private String url;
     private String googleAddressData;
@@ -41,7 +41,7 @@ public class GetAddress extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected LocationInfo doInBackground(String... params) {
         url = (String) params[0];
 
         DownloadUrl downloadUrl = new DownloadUrl();
@@ -51,21 +51,23 @@ public class GetAddress extends AsyncTask<String, String, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return googleAddressData;
+        LocationInfo locationInfo = null;
+        DataParser dataParser = new DataParser();
+        locationInfo = dataParser.parseAddress(googleAddressData);
+        return locationInfo;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        LocationInfo locationInfo = null;
-        DataParser dataParser = new DataParser();
-        locationInfo = dataParser.parseAddress(s);
+    protected void onPostExecute(LocationInfo locationInfo) {
 
         if(locationInfo != null) {
+            mapfrag.setAddress(locationInfo.getAddress());
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(locationInfo.getLocation())
                     .title(locationInfo.getAddress())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.favourite))
                     .draggable(true));
+            mapfrag.setMarker(marker);
             Log.i("android","Lat: " + Double.toString(locationInfo.getLocation().latitude) + " Lng: " + Double.toString(locationInfo.getLocation().longitude));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationInfo.getLocation(),zoomLevel));
             // Zoom in, animating the camera.
@@ -73,7 +75,6 @@ public class GetAddress extends AsyncTask<String, String, String> {
 
             // Zoom out to zoom level 10, animating with a duration of 2 seconds.
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
-            mapfrag.setMarker(marker);
             if(setAddress) {
                 mapfrag.setAddressET(locationInfo.getAddress());
             }

@@ -2,6 +2,7 @@ package bloop.honk.Fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +30,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -52,12 +59,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import bloop.honk.Config;
+import bloop.honk.LoginActivity;
 import bloop.honk.MapComponents.GetAddress;
 import bloop.honk.MapComponents.MapWrapperLayout;
 import bloop.honk.MapComponents.OnInfoWindowElemTouchListener;
 import bloop.honk.MapComponents.PlacesAutoCompleteAdapter;
 import bloop.honk.MapComponents.PlacesItemClickListener;
+import bloop.honk.MapComponents.LocationInfo;
 import bloop.honk.R;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.API_NOT_CONNECTED;
@@ -90,6 +103,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     private MapWrapperLayout mapWrapperLayout;
     private View v;
     private SharedPreferences sharedPreferences;
+    private String address;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -161,15 +175,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         login = true;
                         float zoom = mMap.getCameraPosition().zoom;
                         getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
-                        // Create new fragment and transaction
-                        Fragment fragment = new LoginFragment();
-                        //replacing the fragment
-                        if (fragment != null) {
-                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                            ft.replace(R.id.main_frame_container, fragment, "map");
-                            ft.addToBackStack("map");
-                            ft.commit();
-                        }
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
                     }
                 };
 
@@ -182,10 +189,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         if(marker != null) {
                             marker.remove();
                         }
-                        login = false;
                         float zoom = mMap.getCameraPosition().zoom;
-                        getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
-                        Toast.makeText(getActivity(), marker.getTitle() + " Added to Favourite! And you are logged out!", Toast.LENGTH_SHORT).show();
+                        final LocationInfo locationInfo = getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
+                        address = locationInfo.getAddress();
+                        final double lat = locationInfo.getLocation().latitude;
+                        final double lng = locationInfo.getLocation().longitude;
+                        final String ADD_BOOKMARK_POST = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=addbookmark";
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_BOOKMARK_POST, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if(response.equalsIgnoreCase("unsucessful")){
+                                    Toast.makeText(getContext(), "Adding of Bookmark Failed", Toast.LENGTH_LONG).show();
+                                } else if(response.equalsIgnoreCase("duplicate")){
+                                    Toast.makeText(getContext(), "This bookmark already exist in your list", Toast.LENGTH_LONG).show();
+                                } else if(response.equalsIgnoreCase("success")){
+                                    Toast.makeText(getContext(), "You have added " + address + " into your Favourite List", Toast.LENGTH_SHORT).show();
+                                    Log.i("android", "address: " + address + " lat: " + lat + " lng: " + lng);
+                                } else {
+                                    Toast.makeText(getContext(),"Unknown Error Occurred!", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                                String username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF, "invalid");
+                                Map<String,String> params = new HashMap<>();
+                                //Adding parameters to request
+                                params.put(Config.TAG_USERNAME, username);
+                                params.put("bookmarkname", address);
+                                params.put("latitude", Double.toString(lat));
+                                params.put("longtitude", Double.toString(lng));
+
+                                return params;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                        requestQueue.add(stringRequest);
                     }
                 };
 
@@ -331,7 +377,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     public void onPause() {
         super.onPause();
         if(permissionGranted) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+            if(mGoogleApiClient.isConnected())
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
         }
     }
 
@@ -483,14 +530,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         addressET.setText(address);
     }
 
-    public void getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress)
+    public LocationInfo getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress)
     {
         String geocodeRequestUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&key=" + getResources().getString(R.string.google_maps_key);
 
         GetAddress getAddress = new GetAddress(this, mMap, zoom, setAddress);
-        getAddress.execute(geocodeRequestUrl);
+        LocationInfo locationInfo = null;
+        try {
+            locationInfo = getAddress.execute(geocodeRequestUrl).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return locationInfo;
     }
 
     public void setPermissionGranted(boolean permissionGranted) { this.permissionGranted = permissionGranted; }
 
+    public void setAddress(String address) { this.address = address; }
 }
