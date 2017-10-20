@@ -1,4 +1,4 @@
-package bloop.honk.Fragments;
+package bloop.honk.CameraComponents;
 
 /**
  * Created by Don on 2017/10/13.
