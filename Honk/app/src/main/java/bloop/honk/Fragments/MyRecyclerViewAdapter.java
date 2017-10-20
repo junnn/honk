@@ -12,16 +12,17 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import bloop.honk.Bookmark;
 import bloop.honk.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> mData = Collections.emptyList();
+    private List<Bookmark> mData = Collections.emptyList();
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public MyRecyclerViewAdapter(Context context, List<String> data) {
+    public MyRecyclerViewAdapter(Context context, List<Bookmark> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -37,8 +38,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        Bookmark bookmark = mData.get(position);
+        holder.myTextView.setText(bookmark.name);
         //holder.favIB.setImageResource(R.drawable.favstar);
     }
 
@@ -69,7 +70,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     // convenience method for getting data at click position
-    public String getItem(int id) {
+    public Bookmark getItem(int id) {
         return mData.get(id);
     }
 

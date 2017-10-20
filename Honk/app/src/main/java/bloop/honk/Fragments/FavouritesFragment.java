@@ -38,7 +38,6 @@ public class FavouritesFragment extends Fragment {
     private static final String readBk = "http://172.21.148.166/example/fetchbookmark.php/?username=";
     private static final String delBk = "http://172.21.148.166/example/deletebookmark.php";
     private static List<Bookmark> posts;
-    private static ArrayList<String> test = new ArrayList<>();
     private Gson gson;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
@@ -50,16 +49,15 @@ public class FavouritesFragment extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().setTitle("Favourites");
         super.onCreate(savedInstanceState);
-        test = new ArrayList<>();
         View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
 
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, true)) {//if LOGGEDIN == false
+        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
             Toast.makeText(getContext(), "Please login to access your favourties", Toast.LENGTH_LONG).show();
         }
         else{
-            username = "";
+            //username = "";
                     //sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
 
             requestQueue = Volley.newRequestQueue(getActivity());
@@ -79,7 +77,6 @@ public class FavouritesFragment extends Fragment {
         StringRequest MyStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                test = new ArrayList<>();
                 fetchPosts();
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
@@ -110,19 +107,14 @@ public class FavouritesFragment extends Fragment {
         @Override
         public void onResponse(String response) {
             posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
-            Log.i("PostActivity", posts.size() + " posts loaded.");
-            for (Bookmark bookmark : posts) {
-                test.add(bookmark.name);
-                //Log.i("PostActivity", post.ID + ": " + post.title);
-            }
-            adapter = new MyRecyclerViewAdapter(getActivity(), test);
+            adapter = new MyRecyclerViewAdapter(getActivity(), posts);
             recyclerView.setAdapter(adapter);
             adapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     switch (view.getId()) {
                         case R.id.favImageButton:
-                            deleteBookmark(adapter.getItem(position));
+                            deleteBookmark(adapter.getItem(position).name);
                             Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
                             break;
                         default: // NAVIGATION, i will do it just leave this portion alone
