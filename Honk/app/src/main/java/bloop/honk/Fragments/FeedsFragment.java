@@ -1,5 +1,8 @@
 package bloop.honk.Fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,7 +38,7 @@ public class FeedsFragment extends Fragment {
 
     private Gson gson;
 
-    private static final String ENDPOINT = "http://172.21.148.166/example/trafficfeed.php";
+    private static final String ENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
 
     private RequestQueue requestQueue;
 
@@ -55,8 +59,18 @@ public class FeedsFragment extends Fragment {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
 
-        fetchPosts();
+        if (isNetworkConnected())
+            fetchPosts();
+        else
+            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
+
         return view;
+    }
+
+    public boolean isNetworkConnected() {
+        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 
     private void fetchPosts() {
@@ -71,18 +85,9 @@ public class FeedsFragment extends Fragment {
         public void onResponse(String response) {
             posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
 
-            Log.i("PostActivity", posts.size() + " posts loaded.");
-            /*for (FeedItem feedItem : posts) {
-                String date_time = feedItem.message.substring(0,feedItem.message.indexOf(' ')); // "72"
-                String msg = feedItem.message.substring(feedItem.message.indexOf(' ')+1);
-                Log.i("PostActivity", feedItem.type+":"+date_time + ": " + msg);
-            }*/
-
-                adapter = new FeedsAdapter(getActivity(), posts);
-                //adapter.setClickListener(this);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+            adapter = new FeedsAdapter(getActivity(), posts);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
     };

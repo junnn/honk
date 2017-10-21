@@ -1,5 +1,8 @@
 package bloop.honk.Fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,11 +56,20 @@ public class CamerasFragment extends Fragment {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
 
-        fetchCams();
+        if (isNetworkConnected())
+            fetchCams();
+        else
+            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
 
         recyclerView = view.findViewById(R.id.camrecycler);
 
         return view;
+    }
+
+    public boolean isNetworkConnected() {
+        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 
     private void fetchCams() {
