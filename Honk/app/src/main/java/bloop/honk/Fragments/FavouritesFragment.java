@@ -1,8 +1,10 @@
 package bloop.honk.Fragments;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +30,8 @@ import java.util.Map;
 
 import bloop.honk.Bookmark;
 import bloop.honk.Config;
+import bloop.honk.LoginActivity;
+import bloop.honk.MainActivity;
 import bloop.honk.R;
 
 /**
@@ -54,7 +58,8 @@ public class FavouritesFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
-            Toast.makeText(getContext(), "Please login to access your favourties", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
         }
         else{
             //username = "";
@@ -138,5 +143,18 @@ public class FavouritesFragment extends Fragment {
     //public void onItemClick(View view, int position) {
        //Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
 //}
+
+    @Override
+    public void onResume(){ //if user press back on favourite, will redirect to news instead of favorite fragment
+        super.onResume();
+        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+            Fragment fragment = new NewsFragment();
+
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
+            ft.replace(R.id.main_frame_container, fragment);
+            ft.commit();
+        }
+    }
 }
 
