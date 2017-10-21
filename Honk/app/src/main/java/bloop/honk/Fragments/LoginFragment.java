@@ -25,7 +25,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import bloop.honk.AuthController;
 import bloop.honk.Config;
+import bloop.honk.Model.Account;
 import bloop.honk.R;
 
 /**
@@ -38,12 +40,14 @@ public class LoginFragment extends Fragment {
     private Button loginButton;
 
     private SharedPreferences sharedPreferences;
+    private AuthController authController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         //Creating a shared preference
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        authController = new AuthController();
 
         //init all widgets
         findAllViewById(view);
@@ -54,14 +58,17 @@ public class LoginFragment extends Fragment {
                 switchToRegisterFragment();
             }
         });
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
-
-                login(username, password);
+                if(usernameEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(), "Please ensure all fields are filled.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Account account = new Account(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
+                    account.setPassword(authController.hashPassword(account.getPassword().toCharArray(), account.getUsername().getBytes()));
+                    login(account.getUsername(), account.getPassword());
+                }
             }
         });
 
@@ -94,7 +101,6 @@ public class LoginFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         //If we are getting success from server
                         if(response.equalsIgnoreCase("failure")){
                             Toast.makeText(getContext(), "Invalid username/ password", Toast.LENGTH_LONG).show();

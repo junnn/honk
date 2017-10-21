@@ -22,7 +22,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import bloop.honk.AuthController;
 import bloop.honk.Config;
+import bloop.honk.Model.User;
 import bloop.honk.R;
 
 /**
@@ -33,6 +35,7 @@ public class RegisterFragment extends Fragment {
     private EditText usernameEditText, passwordEditText, confirmPasswordEditText;
     private Button registerButton;
     private SharedPreferences sharedPreferences;
+    private AuthController authController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class RegisterFragment extends Fragment {
 
         //Creating a shared preference
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        authController = new AuthController();
 
         //init all widgets
         findAllViewById(view);
@@ -47,12 +51,15 @@ public class RegisterFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
-                String confirmPassword = confirmPasswordEditText.getText().toString().trim();
-
-                register(username, password, confirmPassword);
-
+                if(usernameEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty() || confirmPasswordEditText.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(), "Please ensure all fields are filled.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    User user = new User(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
+                    user.setPassword(authController.hashPassword(user.getPassword().toCharArray(), user.getUsername().getBytes()));
+                    String confirmPassword = authController.hashPassword(confirmPasswordEditText.getText().toString().trim().toCharArray(), user.getUsername().getBytes());
+                    register(user.getUsername(), user.getPassword(), confirmPassword);
+                }
             }
         });
 
