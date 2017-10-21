@@ -6,12 +6,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -81,11 +81,26 @@ public class NewsFragment extends Fragment{
         @Override
         protected void onPostExecute(String result) {
             adapter = new NewsAdapter(context, entries);
-            //adapter.setClickListener(this);
+
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
+            adapter.setClickListener(new NewsAdapter.ItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String url = "http://"+adapter.getItem(position).getLink();
 
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Link", url);
+
+                    Fragment fragment = new WebViewFragment();
+                    fragment.setArguments(bundle);
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
+                    ft.replace(R.id.main_frame_container, fragment);
+                    ft.commit();
+                }
+            });
+        }
     }
 
     private String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
@@ -122,5 +137,4 @@ public class NewsFragment extends Fragment{
         InputStream stream = conn.getInputStream();
         return stream;
     }
-
 }

@@ -1,8 +1,6 @@
 package bloop.honk.NewsComponents;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import bloop.honk.NewsDetails;
 import bloop.honk.R;
 
 /**
@@ -47,17 +44,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         holder.date.setText(current.pubDate);
         //holder.type.setText(current.news_type);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
 
-                Intent intent = new Intent(context, NewsDetails.class);
-                String url = "http://"+current.getLink();
-                //Log.i("WEBVIEW",url);
-                intent.putExtra("Link", url);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -89,6 +76,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     public String getLink(int id){
         return data.get(id).getLink();
+    }
+
+    public Entry getItem(int id) {
+        return data.get(id);
     }
 
     // allows clicks events to be caught
