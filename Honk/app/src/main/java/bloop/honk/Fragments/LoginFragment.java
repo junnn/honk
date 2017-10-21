@@ -1,7 +1,6 @@
 package bloop.honk.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +24,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-import bloop.honk.AuthController;
+import bloop.honk.Controller.AuthController;
 import bloop.honk.Config;
 import bloop.honk.Model.Account;
 import bloop.honk.R;

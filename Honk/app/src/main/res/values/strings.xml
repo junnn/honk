@@ -20,4 +20,5 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="connection_error">Connection Error</string>
     <string name="xml_error">XML Error</string>
+    <string name="nav_quit">Quit</string>
 </resources>
