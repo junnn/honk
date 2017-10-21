@@ -19,8 +19,8 @@ public class WebViewFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_webview, container, false);
-        getActivity().setTitle("News");//set the title on the toolbar
-        webView =(WebView) view.findViewById(R.id.webview);
+
+        webView = view.findViewById(R.id.webview);
         Bundle bundle = this.getArguments();
 
         webView.getSettings().setJavaScriptEnabled(true);

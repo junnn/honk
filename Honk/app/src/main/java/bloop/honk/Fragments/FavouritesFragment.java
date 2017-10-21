@@ -22,16 +22,15 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bloop.honk.Bookmark;
+import bloop.honk.FavouritesComponents.Bookmark;
 import bloop.honk.Config;
+import bloop.honk.FavouritesComponents.MyRecyclerViewAdapter;
 import bloop.honk.LoginActivity;
-import bloop.honk.MainActivity;
 import bloop.honk.R;
 
 /**

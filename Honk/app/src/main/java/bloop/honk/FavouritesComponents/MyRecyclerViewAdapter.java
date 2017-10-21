@@ -1,4 +1,4 @@
-package bloop.honk.Fragments;
+package bloop.honk.FavouritesComponents;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
-import bloop.honk.Bookmark;
 import bloop.honk.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {

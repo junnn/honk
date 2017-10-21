@@ -31,6 +31,7 @@ import java.util.Map;
 import bloop.honk.CameraComponents.CamItem;
 import bloop.honk.CameraComponents.CamsAdapter;
 import bloop.honk.R;
+
 /**
  * Created by Jun Hao Ng on 6/9/2017.
  */
@@ -59,7 +60,7 @@ public class CamerasFragment extends Fragment {
         if (isNetworkConnected())
             fetchCams();
         else
-            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
         recyclerView = view.findViewById(R.id.camrecycler);
 
@@ -100,7 +101,7 @@ public class CamerasFragment extends Fragment {
             camadapter.setClickListener(new CamsAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Toast.makeText(getActivity(), camadapter.getItem(position).getCameraID() , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), camadapter.getItem(position).getCameraID(), Toast.LENGTH_SHORT).show();
                 }
             });
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

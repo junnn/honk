@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import java.util.Collections;
 import java.util.List;
 
@@ -23,15 +22,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
-    public NewsAdapter(Context context, List<Entry> data){
+    public NewsAdapter(Context context, List<Entry> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
-        this.context=context;
+        this.context = context;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.row, parent,false);
+        View view = inflater.inflate(R.layout.row, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -43,8 +42,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         holder.desc.setText(current.summary);
         holder.date.setText(current.pubDate);
         //holder.type.setText(current.news_type);
-
-
     }
 
     @Override
@@ -52,7 +49,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         TextView desc;
         TextView date;
@@ -71,10 +68,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
-
     }
 
-    public String getLink(int id){
+    public String getLink(int id) {
         return data.get(id).getLink();
     }
 

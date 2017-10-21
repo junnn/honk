@@ -27,7 +27,7 @@ import bloop.honk.NewsComponents.NewsAdapter;
 import bloop.honk.NewsComponents.XmlParser;
 import bloop.honk.R;
 
-public class NewsFragment extends Fragment{
+public class NewsFragment extends Fragment {
     private static final String URL = "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=20&category=1&category=2&category=3";
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
@@ -42,7 +42,7 @@ public class NewsFragment extends Fragment{
         if (isNetworkConnected())
             loadPage();
         else
-            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
         recyclerView = view.findViewById(R.id.recycler);
 
@@ -63,7 +63,7 @@ public class NewsFragment extends Fragment{
 
         private Context context;
 
-        public DownloadXmlTask(Context context){
+        public DownloadXmlTask(Context context) {
             this.context = context;
         }
 
@@ -87,7 +87,7 @@ public class NewsFragment extends Fragment{
             adapter.setClickListener(new NewsAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    String url = "http://"+adapter.getItem(position).getLink();
+                    String url = "http://" + adapter.getItem(position).getLink();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("Link", url);
@@ -111,11 +111,9 @@ public class NewsFragment extends Fragment{
         try {
             stream = downloadUrl(urlString);
             entries = XmlParser.parse(stream);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             if (stream != null) {
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.

@@ -1,4 +1,4 @@
-package bloop.honk;
+package bloop.honk.FavouritesComponents;
 
 /**
  * Created by Bryan Boey S-15 on 2/10/2017.

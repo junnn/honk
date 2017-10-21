@@ -10,7 +10,7 @@ public class CamItem {
     Double Longitude;
     String ImageLink;
 
-    public String getCameraID(){
+    public String getCameraID() {
         return CameraID;
     }
 
