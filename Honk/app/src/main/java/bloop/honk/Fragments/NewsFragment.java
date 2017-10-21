@@ -1,6 +1,8 @@
 package bloop.honk.Fragments;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -36,11 +39,20 @@ public class NewsFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
 
-        loadPage();
+        if (isNetworkConnected())
+            loadPage();
+        else
+            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
 
         recyclerView = view.findViewById(R.id.recycler);
 
         return view;
+    }
+
+    public boolean isNetworkConnected() {
+        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 
     private void loadPage() {
