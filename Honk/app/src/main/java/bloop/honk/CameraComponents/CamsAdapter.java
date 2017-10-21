@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-
-import bloop.honk.Fragments.MyRecyclerViewAdapter;
 import bloop.honk.R;
 
 /**
@@ -88,16 +85,16 @@ public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder>{
             super(itemView);
             title = itemView.findViewById(R.id.listText);
             cam_image = (ImageView) itemView.findViewById(R.id.cam_image);
+
+            title.setOnClickListener(this);
             cam_image.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View view) {
             if (ClickListener != null) ClickListener.onItemClick(view, getAdapterPosition());
         }
     }
-
 
     // convenience method for getting data at click position
     public CamItem getItem(int id) {
