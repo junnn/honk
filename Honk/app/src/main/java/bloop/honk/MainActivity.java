@@ -42,12 +42,14 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import bloop.honk.Controller.AuthController;
 import bloop.honk.Fragments.CamerasFragment;
 import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
 import bloop.honk.MapComponents.GetAddress;
+import bloop.honk.Model.Account;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private final int REQUEST_CHECK_SETTINGS = 101;
     private MapFragment mapfrag = null;
+    private  Account account;
+    private AuthController authController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +69,17 @@ public class MainActivity extends AppCompatActivity
 
         //handle SSLHandshakeException due to Self-signed server certificate
         handleSSLHandshake();
+        authController = new AuthController();
 
         //Creating a shared preference
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+            account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
+        }
+        else{
+            account = null;
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,6 +130,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume(){
         super.onResume();
         if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+            account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Log Out");
 
@@ -159,15 +172,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_login:
                 if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){//if LOGGEDIN == true
-                    //Creating editor to store values to shared preferences
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
 
-                    //clear values of editor
-                    editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, false);
-                    editor.putString(Config.USERNAME_SHARED_PREF, "");
-                    editor.putString(Config.ROLE_SHARED_PREF, "");
-                    //Saving values to editor
-                    editor.apply();
+                    authController.logout(account, sharedPreferences);
 
                     menu = navigationView.getMenu();
                     menu.findItem(R.id.nav_login).setTitle("Login");
@@ -183,26 +190,9 @@ public class MainActivity extends AppCompatActivity
                 }
 
             case R.id.nav_quit:
+                quitApp();
+                break;
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("Are you sure you want to quit?");
-                alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                        homeIntent.addCategory( Intent.CATEGORY_HOME );
-                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(homeIntent);
-                    }
-                });
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                //Showing the alert dialog
-                alertDialogBuilder.create().show();
         }
 
         //replacing the fragment
@@ -270,6 +260,28 @@ public class MainActivity extends AppCompatActivity
             }
             Toast.makeText(this, "This application requires LocationInfo Service to be turned on!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void quitApp(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure you want to quit?");
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        //Showing the alert dialog
+        alertDialogBuilder.create().show();
     }
 
 }

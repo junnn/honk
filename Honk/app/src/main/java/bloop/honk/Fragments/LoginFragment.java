@@ -65,8 +65,8 @@ public class LoginFragment extends Fragment {
                 }
                 else {
                     Account account = new Account(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
-                    account.setPassword(authController.hashPassword(account.getPassword().toCharArray(), account.getUsername().getBytes()));
-                    login(account.getUsername(), account.getPassword());
+                    account.setPassword(authController.hashPassword(account));
+                    authController.login(account, getActivity(), sharedPreferences);
                 }
             }
         });
@@ -92,53 +92,6 @@ public class LoginFragment extends Fragment {
         loginButton = view.findViewById(R.id.login_button);
         registerLink = view.findViewById(R.id.register_text_view);
 
-    }
-
-    //login function
-    private void login(final String username, final String password){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //If we are getting success from server
-                        if(response.equalsIgnoreCase("failure")){
-                            Toast.makeText(getContext(), "Invalid username/ password", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            //Creating editor to store values to shared preferences
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            //Adding values to editor
-                            editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
-                            editor.putString(Config.USERNAME_SHARED_PREF, username);
-                            editor.putString(Config.ROLE_SHARED_PREF, response);
-                            //Saving values to editor
-                            editor.apply();
-
-                            Toast.makeText(getActivity(), "Successfully login", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                //Adding parameters to request
-                params.put(Config.TAG_USERNAME, username);
-                params.put(Config.TAG_PASSWORD, password);
-
-                return params; //return params to string request
-            }
-        };
-        //Adding the string request to the queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());//this is the login request.
-        requestQueue.add(stringRequest);
     }
 }
 
