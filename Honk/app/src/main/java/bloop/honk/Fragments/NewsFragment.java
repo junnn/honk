@@ -22,7 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import bloop.honk.NewsComponents.Entry;
+import bloop.honk.NewsComponents.News;
 import bloop.honk.NewsComponents.NewsAdapter;
 import bloop.honk.NewsComponents.XmlParser;
 import bloop.honk.R;
@@ -32,7 +32,7 @@ public class NewsFragment extends Fragment {
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
 
-    List<Entry> entries;
+    List<News> entries;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class NewsFragment extends Fragment {
         getActivity().setTitle("News");//set the title on the toolbar
 
         if (isNetworkConnected())
-            loadPage();
+            loadNews();
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
@@ -55,7 +55,7 @@ public class NewsFragment extends Fragment {
         return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 
-    private void loadPage() {
+    private void loadNews() {
         new DownloadXmlTask(getActivity()).execute(URL);
     }
 
@@ -132,7 +132,6 @@ public class NewsFragment extends Fragment {
         conn.setDoInput(true);
         // Starts the query
         conn.connect();
-        InputStream stream = conn.getInputStream();
-        return stream;
+        return conn.getInputStream();
     }
 }

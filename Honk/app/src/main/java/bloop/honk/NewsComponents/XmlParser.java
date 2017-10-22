@@ -14,7 +14,7 @@ public class XmlParser {
 
     private static final String ns = null;
 
-    public List<Entry> parse(InputStream in) throws XmlPullParserException, IOException {
+    public List<News> parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -26,8 +26,8 @@ public class XmlParser {
         }
     }
 
-    private List<Entry> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<Entry> entries = new ArrayList<Entry>();
+    private List<News> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<News> entries = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "rss");
         parser.next();
@@ -49,7 +49,7 @@ public class XmlParser {
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them
     // off
     // to their respective &quot;read&quot; methods for processing. Otherwise, skips the tag.
-    private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private News readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "item");
         String title = null;
         String summary = null;
@@ -76,7 +76,7 @@ public class XmlParser {
                 skip(parser);
             }
         }
-        return new Entry(title, summary, link, pubDate, news_type);
+        return new News(title, summary, link, pubDate, news_type);
     }
 
     private String readString(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {

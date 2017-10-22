@@ -5,10 +5,17 @@ package bloop.honk.CameraComponents;
  */
 
 public class CamItem {
-    String CameraID;
-    Double Latitude;
-    Double Longitude;
-    String ImageLink;
+    private String CameraID;
+    private Double Latitude;
+    private Double Longitude;
+    private String ImageLink;
+
+    public CamItem(String cameraID, Double latitude, Double longitude, String imageLink) {
+        CameraID = cameraID;
+        Latitude = latitude;
+        Longitude = longitude;
+        ImageLink = imageLink;
+    }
 
     public String getCameraID() {
         return CameraID;

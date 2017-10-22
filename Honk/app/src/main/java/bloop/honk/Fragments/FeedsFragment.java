@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,7 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bloop.honk.FeedsComponents.FeedItem;
 import bloop.honk.FeedsComponents.FeedsAdapter;
@@ -38,7 +41,8 @@ public class FeedsFragment extends Fragment {
 
     private Gson gson;
 
-    private static final String ENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
+    private static final String NTUENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
+    private static final String LTAENDPOINT = "http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents";
 
     private RequestQueue requestQueue;
 
@@ -60,9 +64,10 @@ public class FeedsFragment extends Fragment {
         gson = gsonBuilder.create();
 
         if (isNetworkConnected())
-            fetchPosts();
+            //fetchPostsLTA();
+            fetchPostsNTU();
         else
-            Toast.makeText(getActivity(), "No Network" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
         return view;
     }
@@ -72,9 +77,22 @@ public class FeedsFragment extends Fragment {
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
+    private void fetchPostsLTA() {
+        StringRequest request = new StringRequest(Request.Method.GET, LTAENDPOINT, onPostsLoaded, onPostsError) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //Map<String, String> params = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("AccountKey", "prxNO+dOSVaCs0F5/UX0rw==");
+                headers.put("accept", "application/json");
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
 
-    private void fetchPosts() {
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, onPostsLoaded, onPostsError);
+    private void fetchPostsNTU() {
+        StringRequest request = new StringRequest(Request.Method.GET, NTUENDPOINT, onPostsLoaded, onPostsError);
 
         requestQueue.add(request);
     }
@@ -83,13 +101,16 @@ public class FeedsFragment extends Fragment {
 
         @Override
         public void onResponse(String response) {
+            //String json = response.substring(response.indexOf("["), response.length() - 1);
+            //Log.i("json", json);
+            //posts = Arrays.asList(gson.fromJson(json, FeedItem[].class));
+
             posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
 
             adapter = new FeedsAdapter(getActivity(), posts);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-
     };
 
     private final Response.ErrorListener onPostsError = new Response.ErrorListener() {

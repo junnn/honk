@@ -17,12 +17,12 @@ import bloop.honk.R;
  */
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
-    Context context;
-    List<Entry> data = Collections.emptyList();
+    private Context context;
+    private List<News> data = Collections.emptyList();
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
-    public NewsAdapter(Context context, List<Entry> data) {
+    public NewsAdapter(Context context, List<News> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -31,16 +31,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.row, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-        return holder;
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final Entry current = data.get(position);
-        holder.title.setText(current.title);
-        holder.desc.setText(current.summary);
-        holder.date.setText(current.pubDate);
+        final News current = data.get(position);
+        holder.title.setText(current.getTitle());
+        holder.desc.setText(current.getSummary());
+        holder.date.setText(current.getPubDate());
         //holder.type.setText(current.news_type);
     }
 
@@ -70,11 +69,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         }
     }
 
-    public String getLink(int id) {
-        return data.get(id).getLink();
-    }
-
-    public Entry getItem(int id) {
+    public News getItem(int id) {
         return data.get(id);
     }
 

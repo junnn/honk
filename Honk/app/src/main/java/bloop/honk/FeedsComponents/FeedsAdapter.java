@@ -18,33 +18,33 @@ import bloop.honk.R;
  * Created by Don on 2017/10/02.
  */
 
-public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder>{
+public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
 
-    List<FeedItem> data = Collections.emptyList();
+    private List<FeedItem> data = Collections.emptyList();
     private LayoutInflater inflater;
 
-    public FeedsAdapter(Context context, List<FeedItem> data){
+    public FeedsAdapter(Context context, List<FeedItem> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.row, parent,false);
-        MyViewHolder holder = new MyViewHolder(view);
-        return holder;
+        View view = inflater.inflate(R.layout.row, parent, false);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final FeedItem current = data.get(position);
-        holder.title.setText(current.type);
-
-        String msg = current.message.substring(current.message.indexOf(' ')+1);
+        holder.title.setText(current.getType());
+        //Log.i("msg", current.Message);
+        String msg = current.getMessage().substring(current.getMessage().indexOf(' ') + 1);
 
         holder.desc.setText(msg);
 
-        String date_time = current.message.substring(0,current.message.indexOf(' '));
+        //String date_time = current.Message.substring(0, current.Message.indexOf(' '));
+        String date_time = current.getDate_time();
 
         SimpleDateFormat spf = new SimpleDateFormat("(dd/MM)hh:mm");
         try {
@@ -52,7 +52,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             spf = new SimpleDateFormat("dd MMM hh:mm a");
             date_time = spf.format(newDate);
             holder.date.setText(date_time);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -62,10 +62,11 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView desc;
         TextView date;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.listText);
