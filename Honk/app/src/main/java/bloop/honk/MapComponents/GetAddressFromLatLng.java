@@ -23,7 +23,7 @@ import bloop.honk.R;
  * Created by Chiang on 16/10/2017.
  */
 
-public class GetAddress extends AsyncTask<String, String, LocationInfo> {
+public class GetAddressFromLatLng extends AsyncTask<String, String, LocationInfo> {
     private Activity context;
     private String url;
     private String googleAddressData;
@@ -32,7 +32,7 @@ public class GetAddress extends AsyncTask<String, String, LocationInfo> {
     private boolean setAddress;
     private MapFragment mapfrag;
 
-    public GetAddress(MapFragment mapfrag, GoogleMap mMap, float zoomLevel, boolean setAddress) {
+    public GetAddressFromLatLng(MapFragment mapfrag, GoogleMap mMap, float zoomLevel, boolean setAddress) {
         this.context = context;
         this.mMap = mMap;
         this.zoomLevel = zoomLevel;

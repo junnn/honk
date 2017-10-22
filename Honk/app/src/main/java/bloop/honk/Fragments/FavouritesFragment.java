@@ -2,6 +2,7 @@ package bloop.honk.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -120,8 +121,13 @@ public class FavouritesFragment extends Fragment {
                             deleteBookmark(adapter.getItem(position).getName());
                             Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
                             break;
-                        default: // NAVIGATION, i will do it just leave this portion alone
-                            Toast.makeText(getActivity(), "You clicked ItemList " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+                        default:
+                            Bookmark bookmark = adapter.getItem(position);
+                            String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
+                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
                     }
                 }
             });

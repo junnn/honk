@@ -8,17 +8,17 @@ import com.google.gson.annotations.SerializedName;
 public class Bookmark {
     @SerializedName("favourite")
     private String name;
-    private String longitude;
+    private String longtitude;
     private String latitude;
 
     public Bookmark(String name, String longitude, String latitude) {
         this.name = name;
-        this.longitude = longitude;
+        this.longtitude = longitude;
         this.latitude = latitude;
     }
 
     public String getLongitude(){
-        return longitude;
+        return longtitude;
     }
 
     public String getLatitude(){

@@ -65,7 +65,7 @@ import java.util.concurrent.ExecutionException;
 
 import bloop.honk.Config;
 import bloop.honk.LoginActivity;
-import bloop.honk.MapComponents.GetAddress;
+import bloop.honk.MapComponents.GetAddressFromLatLng;
 import bloop.honk.MapComponents.MapWrapperLayout;
 import bloop.honk.MapComponents.OnInfoWindowElemTouchListener;
 import bloop.honk.MapComponents.PlacesAutoCompleteAdapter;
@@ -534,10 +534,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     {
         String geocodeRequestUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&key=" + getResources().getString(R.string.google_maps_key);
 
-        GetAddress getAddress = new GetAddress(this, mMap, zoom, setAddress);
+        GetAddressFromLatLng getAddressFromLatLng = new GetAddressFromLatLng(this, mMap, zoom, setAddress);
         LocationInfo locationInfo = null;
         try {
-            locationInfo = getAddress.execute(geocodeRequestUrl).get();
+            locationInfo = getAddressFromLatLng.execute(geocodeRequestUrl).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

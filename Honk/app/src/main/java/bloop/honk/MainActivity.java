@@ -5,32 +5,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Marker;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -48,7 +36,6 @@ import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
-import bloop.honk.MapComponents.GetAddress;
 import bloop.honk.Model.Account;
 
 public class MainActivity extends AppCompatActivity
