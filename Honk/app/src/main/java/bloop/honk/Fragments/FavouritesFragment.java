@@ -29,7 +29,7 @@ import java.util.Map;
 
 import bloop.honk.FavouritesComponents.Bookmark;
 import bloop.honk.Config;
-import bloop.honk.FavouritesComponents.MyRecyclerViewAdapter;
+import bloop.honk.FavouritesComponents.bookmarkAdapter;
 import bloop.honk.LoginActivity;
 import bloop.honk.R;
 
@@ -38,13 +38,13 @@ import bloop.honk.R;
  */
 
 public class FavouritesFragment extends Fragment {
-    private static final String readBk = "http://172.21.148.166/example/fetchbookmark.php/?username=";
-    private static final String delBk = "http://172.21.148.166/example/deletebookmark.php";
+    private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=";
+    private static final String delBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=deletebookmark";
     private static List<Bookmark> posts;
     private Gson gson;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
-    MyRecyclerViewAdapter adapter;
+    bookmarkAdapter adapter;
     private SharedPreferences sharedPreferences;
     private String username;
 
@@ -61,8 +61,8 @@ public class FavouritesFragment extends Fragment {
             startActivity(intent);
         }
         else{
-            //username = "";
-                    //sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
+            username = "admin";
+            //sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
 
             requestQueue = Volley.newRequestQueue(getActivity());
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -77,8 +77,7 @@ public class FavouritesFragment extends Fragment {
 
     private void deleteBookmark(String bkmk) {
         final String bookmark = bkmk;
-        String url = "http://172.21.148.166/example/deletebookmark.php";
-        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, delBk, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 fetchPosts();
@@ -111,14 +110,14 @@ public class FavouritesFragment extends Fragment {
         @Override
         public void onResponse(String response) {
             posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
-            adapter = new MyRecyclerViewAdapter(getActivity(), posts);
+            adapter = new bookmarkAdapter(getActivity(), posts);
             recyclerView.setAdapter(adapter);
-            adapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
+            adapter.setClickListener(new bookmarkAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     switch (view.getId()) {
                         case R.id.favImageButton:
-                            deleteBookmark(adapter.getItem(position).name);
+                            deleteBookmark(adapter.getItem(position).getName());
                             Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
                             break;
                         default: // NAVIGATION, i will do it just leave this portion alone
@@ -140,7 +139,7 @@ public class FavouritesFragment extends Fragment {
     };
     //@Override
     //public void onItemClick(View view, int position) {
-       //Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    //Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
 //}
 
     @Override

@@ -13,14 +13,14 @@ import java.util.List;
 
 import bloop.honk.R;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+public class bookmarkAdapter extends RecyclerView.Adapter<bookmarkAdapter.ViewHolder> {
 
     private List<Bookmark> mData = Collections.emptyList();
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public MyRecyclerViewAdapter(Context context, List<Bookmark> data) {
+    public bookmarkAdapter(Context context, List<Bookmark> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -37,7 +37,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bookmark bookmark = mData.get(position);
-        holder.myTextView.setText(bookmark.name);
+        holder.myTextView.setText(bookmark.getName());
         //holder.favIB.setImageResource(R.drawable.favstar);
     }
 
