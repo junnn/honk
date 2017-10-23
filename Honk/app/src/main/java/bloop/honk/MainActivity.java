@@ -121,12 +121,12 @@ public class MainActivity extends AppCompatActivity
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Log Out");
 
-            Fragment fragment = new NewsFragment();
+            /*Fragment fragment = new NewsFragment();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
             ft.replace(R.id.main_frame_container, fragment);
-            ft.commit();
+            ft.commit();*/
         }
         else{
             menu = navigationView.getMenu();

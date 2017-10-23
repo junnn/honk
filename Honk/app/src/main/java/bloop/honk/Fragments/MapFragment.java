@@ -172,7 +172,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         if(marker != null) {
                             marker.remove();
                         }
-                        login = true;
                         float zoom = mMap.getCameraPosition().zoom;
                         getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -368,7 +367,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         super.onResume();
         if(permissionGranted) {
             if(mGoogleApiClient.isConnected()) {
-                requestLocationUpdates();
+                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
+                    login = true;
+                } else {
+                    login = false;
+                }
+
+                if(mMap != null) {
+                    if(marker != null) {
+                        marker.remove();
+                    }
+                    getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, 15, false);
+                    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+                    addressET.setEnabled(true);
+                }
             }
         }
     }
@@ -380,13 +392,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
             if(mGoogleApiClient.isConnected())
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(permissionGranted)
-            mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -486,9 +491,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                                         }
                                         float zoom = mMap.getCameraPosition().zoom;
                                         getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, zoom, true);
-                                        //marker = addMarker(latLng, String.valueOf(places.get(0).getAddress()));
                                         settingText = true;
-                                        //addressET.setText(String.valueOf(places.get(0).getAddress()));
                                         mAutoCompleteAdapter.clearList();
                                         hideKeyboard();
                                         Toast.makeText(getActivity(), String.valueOf(places.get(0).getAddress()), Toast.LENGTH_SHORT).show();
