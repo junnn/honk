@@ -20,9 +20,6 @@ public class News {
         this.news_type = news_type;
     }
 
-    public News() {
-    }
-
     public String getTitle() {
         return title;
     }
