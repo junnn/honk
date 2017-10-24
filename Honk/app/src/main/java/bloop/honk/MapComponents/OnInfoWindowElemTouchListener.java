@@ -8,10 +8,6 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.Marker;
 
-/**
- * Created by Chiang on 16/10/2017.
- */
-
 public abstract class OnInfoWindowElemTouchListener implements View.OnTouchListener {
     private final View view;
     private final Drawable bgDrawableNormal;

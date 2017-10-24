@@ -27,12 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import bloop.honk.R;
 
-/**
- * Created by Chiang on 16/10/2017.
- */
-
 public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder> implements Filterable {
-    private static final String TAG = "PlacesAutoCompleteAdapter";
     private ArrayList<PlaceAutocomplete> mResultList;
     private GoogleApiClient mGoogleApiClient;
     private LatLngBounds mBounds;
@@ -155,13 +150,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     @Override
     public void onBindViewHolder(PredictionHolder mPredictionHolder, final int i) {
         mPredictionHolder.mPrediction.setText(mResultList.get(i).description);
-
-        /*mPredictionHolder.mRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGetLatLonCallback.getLocation(resultList.get(i).toString());
-            }
-        });*/
     }
 
     @Override

@@ -14,23 +14,17 @@ import com.google.android.gms.maps.model.Marker;
 
 import bloop.honk.R;
 
-/**
- * Created by Chiang on 16/10/2017.
- */
-
 public class MapWrapperLayout extends RelativeLayout {
-    private GoogleMap map;
-
     /**
      * Vertical offset in pixels between the bottom edge of our InfoWindow
      * and the marker position (by default it's bottom edge too).
      * It's a good idea to use custom markers and also the InfoWindow frame,
      * because we probably can't rely on the sizes of the default marker and frame.
      */
+    private GoogleMap map;
     private int bottomOffsetPixels;
     private Marker marker;
     private View infoWindow;
-    LayoutInflater mInflater;
 
     public MapWrapperLayout(Context context) {
         super(context);

@@ -59,18 +59,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import bloop.honk.Config;
 import bloop.honk.LoginActivity;
-import bloop.honk.MapComponents.GetAddress;
+import bloop.honk.MapComponents.GetAddressFromLatLng;
 import bloop.honk.MapComponents.MapWrapperLayout;
 import bloop.honk.MapComponents.OnInfoWindowElemTouchListener;
 import bloop.honk.MapComponents.PlacesAutoCompleteAdapter;
 import bloop.honk.MapComponents.PlacesItemClickListener;
-import bloop.honk.MapComponents.LocationInfo;
 import bloop.honk.R;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.API_NOT_CONNECTED;
@@ -81,25 +83,16 @@ import static com.google.android.gms.common.api.CommonStatusCodes.API_NOT_CONNEC
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, ResultCallback<LocationSettingsResult>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private final int ACCESS_FINE_LOCATION_REQUEST_CODE = 100;
+    private final int LOCATION_REQUEST_CODE = 100;
     private final int REQUEST_CHECK_SETTINGS = 101;
-    private boolean permissionGranted = false, settingText = false, login;
+    private boolean permissionGranted = false, settingText = false, isLogin = false;
     private GoogleMap mMap = null;
-    private GoogleApiClient mGoogleApiClient;
     private Marker marker = null;
-    private LocationRequest locationRequest;
-    private LocationSettingsRequest mLocationSettingsRequest;
     private LatLng latLng = null;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest locationRequest;
+    private LocationSettingsRequest mLocSettingsReq;
     private EditText addressET;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
-    private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
-    private AppCompatImageView delete;
-    private ViewGroup infoWindow;
-    private TextView infoTitle;
-    private Button infoLoginButton;
-    private Button infoFavButton;
-    private OnInfoWindowElemTouchListener infologinButtonListener, infofavButtonListener;
     private MapWrapperLayout mapWrapperLayout;
     private View v;
     private SharedPreferences sharedPreferences;
@@ -110,9 +103,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         mapWrapperLayout = view.findViewById(R.id.map_relative_layout);
-        getActivity().setTitle("Maps");//set the title on the toolbar
+        getActivity().setTitle("Maps");
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        login = sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false);
+        isLogin = sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false);
         buildGoogleApiClient();
         setupLocationRequest();
         v = view;
@@ -124,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         super.onViewCreated(view, savedInstanceState);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST_CODE);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
             return;
         } else {
@@ -154,16 +147,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        final Button infoLoginButton, infoFavButton;
+        final ViewGroup infoWindow;
+        final TextView infoTitle;
         if(permissionGranted) {
             if(mMap != null) {
                 mMap.getUiSettings().setMapToolbarEnabled(false);
                 mapWrapperLayout.init(mMap, getPixelsFromDp(getActivity(), 39 + 20));
-                this.infoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.marker_info_layout, null);
-                this.infoTitle = (TextView)infoWindow.findViewById(R.id.addressTV);
-                this.infoLoginButton = (Button)infoWindow.findViewById(R.id.loginBtn);
-                this.infoFavButton = (Button)infoWindow.findViewById(R.id.favBtn);
+                infoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.marker_info_layout, null);
+                infoTitle = (TextView)infoWindow.findViewById(R.id.addressTV);
+                infoLoginButton = (Button)infoWindow.findViewById(R.id.loginBtn);
+                infoFavButton = (Button)infoWindow.findViewById(R.id.favBtn);
 
-                this.infologinButtonListener = new OnInfoWindowElemTouchListener(infoLoginButton,
+                final OnInfoWindowElemTouchListener infologinButtonListener = new OnInfoWindowElemTouchListener(infoLoginButton,
                         ContextCompat.getDrawable(getActivity(), R.drawable.login_norm),
                         ContextCompat.getDrawable(getActivity(), R.drawable.login_pressed)) {
 
@@ -172,7 +168,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         if(marker != null) {
                             marker.remove();
                         }
-                        login = true;
                         float zoom = mMap.getCameraPosition().zoom;
                         getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -180,7 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     }
                 };
 
-                this.infofavButtonListener = new OnInfoWindowElemTouchListener(infoFavButton,
+                final OnInfoWindowElemTouchListener infofavButtonListener = new OnInfoWindowElemTouchListener(infoFavButton,
                         ContextCompat.getDrawable(getActivity(), R.drawable.fav_norm),
                         ContextCompat.getDrawable(getActivity(), R.drawable.fav_pressed)) {
 
@@ -190,10 +185,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                             marker.remove();
                         }
                         float zoom = mMap.getCameraPosition().zoom;
-                        final LocationInfo locationInfo = getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
-                        address = locationInfo.getAddress();
-                        final double lat = locationInfo.getLocation().latitude;
-                        final double lng = locationInfo.getLocation().longitude;
+                        final String locationInfo = getAddressFromLatLng(markerz.getPosition().latitude, markerz.getPosition().longitude, mMap, zoom, false);
+                        String locAddress = "", locLat = "", locLng = "";
+                        try {
+                            JSONObject jsonObject = new JSONObject(locationInfo);
+                            jsonObject = jsonObject.getJSONArray("results").getJSONObject(0);
+                            locAddress = jsonObject.getString("formatted_address");
+                            jsonObject = jsonObject.getJSONObject("geometry");
+                            locLat = jsonObject.getJSONObject("location").getString("lat");
+                            locLng = jsonObject.getJSONObject("location").getString("lng");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        address = locAddress;
+                        final double lat = Double.parseDouble(locLat);
+                        final double lng = Double.parseDouble(locLng);
                         final String ADD_BOOKMARK_POST = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=addbookmark";
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_BOOKMARK_POST, new Response.Listener<String>() {
                             @Override
@@ -235,8 +241,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     }
                 };
 
-                this.infoLoginButton.setOnTouchListener(infologinButtonListener);
-                this.infoFavButton.setOnTouchListener(infofavButtonListener);
+                infoLoginButton.setOnTouchListener(infologinButtonListener);
+                infoFavButton.setOnTouchListener(infofavButtonListener);
 
                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
@@ -263,8 +269,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     public View getInfoContents(Marker marker) {
                         LatLng latLng = marker.getPosition();
                         infoTitle.setText(marker.getTitle());
-                        if(login) {
-                            // do stuffs for user not login
+                        if(isLogin) {
+                            // do stuffs for user not isLogin
                             infofavButtonListener.setMarker(marker);
                             infoFavButton.setEnabled(true);
                             infoFavButton.setVisibility(View.VISIBLE);
@@ -290,7 +296,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case ACCESS_FINE_LOCATION_REQUEST_CODE:
+            case LOCATION_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     permissionGranted = true;
                     buildLocationSettingsRequest();
@@ -304,17 +310,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         }
     }
 
-    protected void buildLocationSettingsRequest() {
+    private void buildLocationSettingsRequest() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(locationRequest);
-        mLocationSettingsRequest = builder.build();
+        mLocSettingsReq = builder.build();
     }
 
-    protected void checkLocationSettings() {
+    private void checkLocationSettings() {
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(
                         mGoogleApiClient,
-                        mLocationSettingsRequest
+                        mLocSettingsReq
                 );
         result.setResultCallback(this);
     }
@@ -368,7 +374,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         super.onResume();
         if(permissionGranted) {
             if(mGoogleApiClient.isConnected()) {
-                requestLocationUpdates();
+                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
+                    isLogin = true;
+                } else {
+                    isLogin = false;
+                }
+
+                if(mMap != null) {
+                    if(marker != null) {
+                        marker.remove();
+                    }
+                    getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, 15, false);
+                    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+                    addressET.setEnabled(true);
+                }
             }
         }
     }
@@ -380,13 +399,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
             if(mGoogleApiClient.isConnected())
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(permissionGranted)
-            mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -416,7 +428,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     public void requestLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST_CODE);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
             return;
         }
@@ -426,16 +438,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
     public void setupAutoCompletePlaces() {
         addressET = (EditText) v.findViewById(R.id.addressET);
-        delete=(AppCompatImageView) v.findViewById(R.id.crossImageView);
+        AppCompatImageView delete=(AppCompatImageView) v.findViewById(R.id.crossImageView);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        mAutoCompleteAdapter =  new PlacesAutoCompleteAdapter(getActivity(), R.layout.searchview_adapter,
+        final PlacesAutoCompleteAdapter mAutoCompleteAdapter =  new PlacesAutoCompleteAdapter(getActivity(), R.layout.searchview_adapter,
                 mGoogleApiClient, new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0)), new AutocompleteFilter.Builder().
                 setTypeFilter(Place.TYPE_COUNTRY).setCountry("SG").build());
 
-        mRecyclerView=(RecyclerView) getView().findViewById(R.id.locationResultRecyclerView);
-        mLinearLayoutManager=new LinearLayoutManager(getActivity());
+        RecyclerView mRecyclerView=(RecyclerView) getView().findViewById(R.id.locationResultRecyclerView);
+        LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAutoCompleteAdapter);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -486,9 +498,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                                         }
                                         float zoom = mMap.getCameraPosition().zoom;
                                         getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, zoom, true);
-                                        //marker = addMarker(latLng, String.valueOf(places.get(0).getAddress()));
                                         settingText = true;
-                                        //addressET.setText(String.valueOf(places.get(0).getAddress()));
                                         mAutoCompleteAdapter.clearList();
                                         hideKeyboard();
                                         Toast.makeText(getActivity(), String.valueOf(places.get(0).getAddress()), Toast.LENGTH_SHORT).show();
@@ -530,20 +540,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         addressET.setText(address);
     }
 
-    public LocationInfo getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress)
+    private String getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress)
     {
         String geocodeRequestUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&key=" + getResources().getString(R.string.google_maps_key);
 
-        GetAddress getAddress = new GetAddress(this, mMap, zoom, setAddress);
-        LocationInfo locationInfo = null;
+        GetAddressFromLatLng getAddressFromLatLng = new GetAddressFromLatLng(this, mMap, zoom, setAddress);
+        String data = "";
         try {
-            locationInfo = getAddress.execute(geocodeRequestUrl).get();
+            data = getAddressFromLatLng.execute(geocodeRequestUrl).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return locationInfo;
+        return data;
     }
 
     public void setPermissionGranted(boolean permissionGranted) { this.permissionGranted = permissionGranted; }
