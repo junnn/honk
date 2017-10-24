@@ -7,7 +7,7 @@ package bloop.honk;
 public class Config {
     //SHARED PREFERENCE CONFIG
     //name of our shared preferences
-    public static final String SHARED_PREF_NAME = "DineInRestaurant";
+    public static final String SHARED_PREF_NAME = "Honk";
     public static final String USERNAME_SHARED_PREF = "username";
     public static final String LOGGEDIN_SHARED_PREF = "isloggedin";
     public static final String ROLE_SHARED_PREF = "role";
