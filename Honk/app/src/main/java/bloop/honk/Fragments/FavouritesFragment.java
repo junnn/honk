@@ -102,50 +102,40 @@ public class FavouritesFragment extends Fragment {
 
 
     private void fetchPosts() {
-        StringRequest request = new StringRequest(Request.Method.GET, readBk + username, onPostsLoaded, onPostsError);
+        StringRequest request = new StringRequest(Request.Method.GET, readBk + username, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
+                adapter = new bookmarkAdapter(getActivity(), posts);
+                recyclerView.setAdapter(adapter);
+                adapter.setClickListener(new bookmarkAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        switch (view.getId()) {
+                            case R.id.favImageButton:
+                                deleteBookmark(adapter.getItem(position).getName());
+                                Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Bookmark bookmark = adapter.getItem(position);
+                                String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
+                                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
+                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                mapIntent.setPackage("com.google.android.apps.maps");
+                                startActivity(mapIntent);
+                        }
+                    }
+                });
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("PostActivity", error.toString());
+            }
+        });
         requestQueue.add(request);
     }
-
-    private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
-            adapter = new bookmarkAdapter(getActivity(), posts);
-            recyclerView.setAdapter(adapter);
-            adapter.setClickListener(new bookmarkAdapter.ItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    switch (view.getId()) {
-                        case R.id.favImageButton:
-                            deleteBookmark(adapter.getItem(position).getName());
-                            Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Bookmark bookmark = adapter.getItem(position);
-                            String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
-                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
-                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                            mapIntent.setPackage("com.google.android.apps.maps");
-                            startActivity(mapIntent);
-                    }
-                }
-            });
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-    };
-
-
-
-    private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e("PostActivity", error.toString());
-        }
-    };
-    //@Override
-    //public void onItemClick(View view, int position) {
-    //Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-//}
 
     @Override
     public void onResume(){ //if user press back on favourite, will redirect to news instead of favorite fragment

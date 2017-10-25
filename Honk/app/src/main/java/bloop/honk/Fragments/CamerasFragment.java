@@ -74,7 +74,31 @@ public class CamerasFragment extends Fragment {
     }
 
     private void fetchCams() {
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, onPostsLoaded, onPostsError) {
+        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String json = response.substring(response.indexOf("["), response.length() - 1);
+
+                cams = Arrays.asList(gson.fromJson(json, CamItem[].class));
+
+                camadapter = new CamsAdapter(getActivity(), cams);
+                recyclerView.setAdapter(camadapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                camadapter.setClickListener(new CamsAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), camadapter.getItem(position).getCameraID(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("PostActivity", error.toString());
+            }
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 //Map<String, String> params = new HashMap<String, String>();
@@ -86,32 +110,4 @@ public class CamerasFragment extends Fragment {
         };
         requestQueue.add(request);
     }
-
-    private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            String json = response.substring(response.indexOf("["), response.length() - 1);
-
-            cams = Arrays.asList(gson.fromJson(json, CamItem[].class));
-
-            camadapter = new CamsAdapter(getActivity(), cams);
-            recyclerView.setAdapter(camadapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-            camadapter.setClickListener(new CamsAdapter.ItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    Toast.makeText(getActivity(), camadapter.getItem(position).getCameraID(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-    };
-
-    private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e("PostActivity", error.toString());
-        }
-    };
 }

@@ -42,7 +42,6 @@ public class FeedsFragment extends Fragment {
     private Gson gson;
 
     private static final String NTUENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
-    private static final String LTAENDPOINT = "http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents";
 
     private RequestQueue requestQueue;
 
@@ -64,7 +63,6 @@ public class FeedsFragment extends Fragment {
         gson = gsonBuilder.create();
 
         if (isNetworkConnected())
-            //fetchPostsLTA();
             fetchPostsNTU();
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
@@ -77,47 +75,25 @@ public class FeedsFragment extends Fragment {
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
-    private void fetchPostsLTA() {
-        StringRequest request = new StringRequest(Request.Method.GET, LTAENDPOINT, onPostsLoaded, onPostsError) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                //Map<String, String> params = new HashMap<String, String>();
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("AccountKey", "prxNO+dOSVaCs0F5/UX0rw==");
-                headers.put("accept", "application/json");
-                return headers;
-            }
-        };
-        requestQueue.add(request);
-    }
 
     private void fetchPostsNTU() {
-        StringRequest request = new StringRequest(Request.Method.GET, NTUENDPOINT, onPostsLoaded, onPostsError);
+        StringRequest request = new StringRequest(Request.Method.GET, NTUENDPOINT, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
+
+                adapter = new FeedsAdapter(getActivity(), posts);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("PostActivity", error.toString());
+            }
+        });
 
         requestQueue.add(request);
     }
-
-    private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
-
-        @Override
-        public void onResponse(String response) {
-            //String json = response.substring(response.indexOf("["), response.length() - 1);
-            //Log.i("json", json);
-            //posts = Arrays.asList(gson.fromJson(json, FeedItem[].class));
-
-            posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
-
-            adapter = new FeedsAdapter(getActivity(), posts);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-    };
-
-    private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e("PostActivity", error.toString());
-        }
-    };
-
 }
