@@ -1,10 +1,13 @@
 package bloop.honk.FeedsComponents;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -22,10 +25,12 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
 
     private List<FeedItem> data = Collections.emptyList();
     private LayoutInflater inflater;
+    private Context context;
 
     public FeedsAdapter(Context context, List<FeedItem> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.context = context;
     }
 
     @Override
@@ -38,7 +43,8 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final FeedItem current = data.get(position);
         holder.title.setText(current.getType());
-        //Log.i("msg", current.Message);
+        /*if(current.getType().equalsIgnoreCase("heavy traffic"))
+            holder.image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favstar));*/
         String msg = current.getMessage().substring(current.getMessage().indexOf(' ') + 1);
 
         holder.desc.setText(msg);
@@ -66,12 +72,14 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         TextView title;
         TextView desc;
         TextView date;
+//        ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.listText);
             desc = itemView.findViewById(R.id.descText);
             date = itemView.findViewById(R.id.dateText);
+//            image = itemView.findViewById(R.id.imageView2);
         }
     }
 }

@@ -62,8 +62,7 @@ public class FavouritesFragment extends Fragment {
             startActivity(intent);
         }
         else{
-            username = "admin";
-            //sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
+            username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
 
             requestQueue = Volley.newRequestQueue(getActivity());
             GsonBuilder gsonBuilder = new GsonBuilder();

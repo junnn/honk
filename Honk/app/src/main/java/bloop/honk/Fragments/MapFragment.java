@@ -501,7 +501,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                                         settingText = true;
                                         mAutoCompleteAdapter.clearList();
                                         hideKeyboard();
-                                        Toast.makeText(getActivity(), String.valueOf(places.get(0).getAddress()), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getActivity(), "SOMETHING_WENT_WRONG", Toast.LENGTH_SHORT).show();
                                     }
