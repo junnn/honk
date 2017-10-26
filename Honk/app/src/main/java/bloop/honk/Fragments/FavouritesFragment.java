@@ -23,11 +23,13 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bloop.honk.Controller.BookmarkController;
 import bloop.honk.FavouritesComponents.Bookmark;
 import bloop.honk.Config;
 import bloop.honk.FavouritesComponents.bookmarkAdapter;
@@ -42,10 +44,12 @@ public class FavouritesFragment extends Fragment {
     private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=";
     private static final String delBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=deletebookmark";
     private static List<Bookmark> posts;
+    private Bookmark bob = new Bookmark("bob","1","2");
     private Gson gson;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
-    bookmarkAdapter adapter;
+    private static BookmarkController b;
+    private bookmarkAdapter adapter;
     private SharedPreferences sharedPreferences;
     private String username;
 
@@ -63,14 +67,14 @@ public class FavouritesFragment extends Fragment {
         }
         else{
             username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
-
-            requestQueue = Volley.newRequestQueue(getActivity());
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-            gson = gsonBuilder.create();
-            fetchPosts();
-            // data to populate the RecyclerView with
+            b = new BookmarkController(username,getActivity());
             recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            //b.getBookmark(username,getActivity());
+            posts = b.returnList();
+            adapter = new bookmarkAdapter(getActivity(), posts);
+            recyclerView.setAdapter(adapter);
+            // data to populate the RecyclerView with
         }
         return rootView;
     }
