@@ -69,11 +69,11 @@ public class FavouritesFragment extends Fragment {
             username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
             b = new BookmarkController(username,getActivity());
             recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
-            b.getBookmark(username,getActivity());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            //b.getBookmark(username,getActivity());
             posts = b.returnList();
             adapter = new bookmarkAdapter(getActivity(), posts);
             recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             // data to populate the RecyclerView with
         }
         return rootView;

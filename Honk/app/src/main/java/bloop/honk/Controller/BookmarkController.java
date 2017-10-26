@@ -26,23 +26,22 @@ import bloop.honk.FavouritesComponents.Bookmark;
  */
 //TRIED MAKING but complete failure
 public class BookmarkController {
-    private static BookmarkController instance = null;
     private static Gson gson;
     private static List<Bookmark> posts = new ArrayList<Bookmark>();
     public static RequestQueue r;
-    private static boolean wait = true;
-    private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=dummy";
+    private boolean wait = true;
+    private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=";
 
     public BookmarkController(String username,Activity activity) {
         getBookmark(username,activity);
     }
-    public static void getBookmark(String username, Activity activity) {
+    public void getBookmark(String username, Activity activity) {
         RequestQueue queue = Volley.newRequestQueue(activity);
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, readBk,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, readBk+username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -60,11 +59,11 @@ public class BookmarkController {
         queue.add(stringRequest);
     }
 
-    public static boolean getstate() {
+    public boolean getstate() {
         return wait;
     }
 
-    public static List<Bookmark> returnList() {
+    public List<Bookmark> returnList() {
         return posts;
     }
 }
