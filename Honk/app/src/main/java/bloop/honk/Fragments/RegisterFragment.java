@@ -25,6 +25,7 @@ import bloop.honk.Controller.AuthController;
 import bloop.honk.Config;
 import bloop.honk.Model.User;
 import bloop.honk.R;
+import bloop.honk.RegexHelper;
 
 /**
  * Created by Jun Hao Ng on 22/9/2017.
@@ -35,14 +36,18 @@ public class RegisterFragment extends Fragment {
     private Button registerButton;
     private SharedPreferences sharedPreferences;
     private AuthController authController;
+    private RegexHelper regexHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+
+
         //Creating a shared preference
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         authController = new AuthController();
+        regexHelper = new RegexHelper();
 
         //init all widgets
         findAllViewById(view);
@@ -50,13 +55,26 @@ public class RegisterFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 if(usernameEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty() || confirmPasswordEditText.getText().toString().isEmpty()){
                     Toast.makeText(getContext(), "Please ensure all fields are filled.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    User user = new User(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
-                    String confirmPassword = confirmPasswordEditText.getText().toString().trim();
-                    authController.register(user, confirmPassword, getActivity(), sharedPreferences);
+                    if(regexHelper.emailRegex(usernameEditText.getText().toString())) {
+                        if(regexHelper.alphanumericRegex(passwordEditText.getText().toString())) {
+                            User user = new User(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
+                            String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+                            authController.register(user, confirmPassword, getActivity(), sharedPreferences);
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Please ensure password is aleast 6 characters long & is alpha/numeric", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getContext(), "Please ensure username is in correct email format", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });

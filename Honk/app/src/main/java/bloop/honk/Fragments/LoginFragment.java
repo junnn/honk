@@ -28,6 +28,7 @@ import bloop.honk.Controller.AuthController;
 import bloop.honk.Config;
 import bloop.honk.Model.Account;
 import bloop.honk.R;
+import bloop.honk.RegexHelper;
 
 /**
  * Created by Jun Hao Ng on 22/9/2017.
@@ -40,6 +41,7 @@ public class LoginFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
     private AuthController authController;
+    private RegexHelper regexHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class LoginFragment extends Fragment {
         //Creating a shared preference
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         authController = new AuthController();
+        regexHelper = new RegexHelper();
 
         //init all widgets
         findAllViewById(view);
@@ -64,9 +67,15 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getContext(), "Please ensure all fields are filled.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Account account = new Account(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
-                    account.setPassword(authController.hashPassword(account));
-                    authController.login(account, getActivity(), sharedPreferences);
+                    if(regexHelper.emailRegex(usernameEditText.getText().toString())){
+                        Account account = new Account(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
+                        account.setPassword(authController.hashPassword(account));
+                        authController.login(account, getActivity(), sharedPreferences);
+                    }
+                    else{
+                        Toast.makeText(getContext(), "Please ensure username is in correct email format", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
