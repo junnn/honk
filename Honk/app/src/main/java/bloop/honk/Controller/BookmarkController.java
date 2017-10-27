@@ -43,6 +43,9 @@ public class BookmarkController {
         this.activity = activity;
         this.adapter = adapter;
     }
+    public void addBookmark(String username,String address, double lat, double lng ,final String url) {
+        bookmark.addBookmark(username,address,lat,lng,url,activity);
+    }
     public void getBookmarkList(String username, final RecyclerView recyclerView, final List<Bookmark> posts) {
         bookmark.getBookmarkList(username, recyclerView, posts, activity, adapter);
     }
