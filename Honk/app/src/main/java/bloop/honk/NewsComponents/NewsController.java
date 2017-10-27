@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -29,7 +32,7 @@ import bloop.honk.R;
 public class NewsController {
     private static final String URL = "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=20&category=1&category=2&category=3";
 
-    private static List<News> newsList = new ArrayList<News>();
+    private static List<News> newsList = new ArrayList<>();
 
     public static List<News> getNewsList() {
         return newsList;
@@ -45,9 +48,11 @@ public class NewsController {
     public static class DownloadXmlTask extends AsyncTask<String, Void, String> {
 
         private Context context;
+        private NewsAdapter newsAdapter;
 
-        public DownloadXmlTask(Context context) {
+        public DownloadXmlTask(Context context, NewsAdapter newsAdapter) {
             this.context = context;
+            this.newsAdapter = newsAdapter;
         }
 
         @Override
@@ -63,18 +68,18 @@ public class NewsController {
 
         @Override
         protected void onPostExecute(String result) {
-
+            newsAdapter.notifyDataSetChanged();
         }
     }
 
     private static String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         XmlParser XmlParser = new XmlParser();
-        newsList = null;
+        newsList.clear();
 
         try {
             stream = downloadUrl(urlString);
-            newsList = XmlParser.parse(stream);
+            newsList.addAll(XmlParser.parse(stream));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

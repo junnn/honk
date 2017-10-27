@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,19 +42,20 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
 
+        recyclerView = view.findViewById(R.id.recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new NewsAdapter(getActivity(), NewsController.getNewsList());
+
         if (isNetworkConnected()) {
-            new NewsController.DownloadXmlTask(getActivity()).execute(URL);;
+            new NewsController.DownloadXmlTask(getActivity(), adapter).execute(URL);
             //task.execute(URL);
             //new NewsController.DownloadXmlTask(getActivity()).execute(URL);
         }
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
-        recyclerView = view.findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        adapter = new NewsAdapter(getActivity(), NewsController.getNewsList());
         recyclerView.setAdapter(adapter);
+
 
         adapter.setClickListener(new NewsAdapter.ItemClickListener() {
             @Override
