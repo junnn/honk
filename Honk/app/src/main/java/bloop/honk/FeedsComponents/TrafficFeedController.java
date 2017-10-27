@@ -40,6 +40,7 @@ public class TrafficFeedController {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
         requestQueue = Volley.newRequestQueue(activity);
+
         StringRequest request = new StringRequest(Request.Method.GET, NTUENDPOINT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

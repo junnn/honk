@@ -23,12 +23,14 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import bloop.honk.CameraComponents.CamItem;
+import bloop.honk.CameraComponents.CameraController;
 import bloop.honk.CameraComponents.CamsAdapter;
 import bloop.honk.R;
 
@@ -37,28 +39,28 @@ import bloop.honk.R;
  */
 
 public class CamerasFragment extends Fragment {
-    private static final String ENDPOINT = "http://datamall2.mytransport.sg/ltaodataservice/Traffic-Images";
 
-    private RequestQueue requestQueue;
-    private Gson gson;
     private RecyclerView recyclerView;
-    private CamsAdapter camadapter;
+    private CamsAdapter camsAdapter;
+    private CameraController cameraController;
     View view;
-    List<CamItem> cams;
+    private List<CamItem> cams = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cameras, container, false);
         getActivity().setTitle("Cameras");//set the title on the toolbar
 
-        requestQueue = Volley.newRequestQueue(getActivity());
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
+        camsAdapter = new CamsAdapter(getActivity(), cams);
+
+        cameraController = new CameraController(getActivity(), camsAdapter);
+
+        recyclerView = view.findViewById(R.id.camrecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (isNetworkConnected())
-            fetchCams();
+            cameraController.fetchCams(recyclerView, cams);
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
@@ -73,41 +75,5 @@ public class CamerasFragment extends Fragment {
         return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 
-    private void fetchCams() {
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                String json = response.substring(response.indexOf("["), response.length() - 1);
 
-                cams = Arrays.asList(gson.fromJson(json, CamItem[].class));
-
-                camadapter = new CamsAdapter(getActivity(), cams);
-                recyclerView.setAdapter(camadapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-                camadapter.setClickListener(new CamsAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Toast.makeText(getActivity(), camadapter.getItem(position).getCameraID(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("PostActivity", error.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                //Map<String, String> params = new HashMap<String, String>();
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("AccountKey", "prxNO+dOSVaCs0F5/UX0rw==");
-                headers.put("accept", "application/json");
-                return headers;
-            }
-        };
-        requestQueue.add(request);
-    }
 }
