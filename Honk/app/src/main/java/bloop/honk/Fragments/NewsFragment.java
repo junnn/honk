@@ -3,38 +3,26 @@ package bloop.honk.Fragments;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import bloop.honk.NewsComponents.News;
 import bloop.honk.NewsComponents.NewsAdapter;
 import bloop.honk.NewsComponents.NewsController;
-import bloop.honk.NewsComponents.XmlParser;
 import bloop.honk.R;
 
 
 public class NewsFragment extends Fragment {
-    private static final String URL = "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=10&category=1&category=2&category=3";
+
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
+
     //List<News> newsList = new ArrayList<News>();
 
     @Override
@@ -42,20 +30,23 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
 
+        NewsController con = new NewsController(getActivity());
+
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new NewsAdapter(getActivity(), NewsController.getNewsList());
+        adapter = new NewsAdapter(getActivity(), con.getNewsList());
 
         if (isNetworkConnected()) {
-            new NewsController.DownloadXmlTask(getActivity(), adapter).execute(URL);
+            con.fetchNews(getActivity(), adapter);
+
+            //new NewsManager.DownloadXmlTask(getActivity(), adapter).execute(URL);
             //task.execute(URL);
-            //new NewsController.DownloadXmlTask(getActivity()).execute(URL);
+            //new NewsManager.DownloadXmlTask(getActivity()).execute(URL);
         }
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
         recyclerView.setAdapter(adapter);
-
 
         adapter.setClickListener(new NewsAdapter.ItemClickListener() {
             @Override
