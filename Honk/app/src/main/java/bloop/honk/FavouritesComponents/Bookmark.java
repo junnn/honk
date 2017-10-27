@@ -70,6 +70,7 @@ public class Bookmark {
                             if(posts.isEmpty()){
                                 posts.clear();
                             }
+                            posts.clear();
                             posts.addAll(Arrays.asList(gson.fromJson(response, Bookmark[].class)));
                             //adapter = new BookmarkAdapter(activity, posts);
                             recyclerView.setAdapter(adapter);// data to populate the RecyclerView with
@@ -87,14 +88,14 @@ public class Bookmark {
         queue.add(stringRequest);
     }
 
-    public void deleteBookmark(final String username, final String bkmk, final Activity activity) {
+    public void deleteBookmark(final String username, final RecyclerView recyclerView,final List<Bookmark> posts, final String bkmk, final Activity activity,final BookmarkAdapter adapter) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         StringRequest MyStringRequest = new StringRequest(Request.Method.POST, delBk, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //fetchPosts();
-
+                getBookmarkList(username,recyclerView,posts,activity,adapter);
                 Toast.makeText(activity, "You unbookmarked FavButton " + bkmk, Toast.LENGTH_SHORT).show();
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.

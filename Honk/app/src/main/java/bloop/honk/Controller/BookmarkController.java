@@ -47,7 +47,7 @@ public class BookmarkController {
         bookmark.getBookmarkList(username, recyclerView, posts, activity, adapter);
     }
 
-    public void deleteBookmark(final String username, final String bkmk) {
-        bookmark.deleteBookmark(username, bkmk, activity);
+    public void deleteBookmark(final String username,final List<Bookmark> posts, final RecyclerView recyclerView, final String bkmk) {
+        bookmark.deleteBookmark(username,recyclerView,posts, bkmk, activity,adapter);
     }
 }

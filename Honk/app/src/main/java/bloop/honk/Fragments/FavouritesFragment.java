@@ -70,9 +70,8 @@ public class FavouritesFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 switch (view.getId()) {
                     case R.id.favImageButton:
-                        bookmarkController.deleteBookmark(username, adapter.getItem(position).getName());
-                        posts.clear();
-                        bookmarkController.getBookmarkList(username, recyclerView, posts);
+                        bookmarkController.deleteBookmark(username,posts,recyclerView, adapter.getItem(position).getName());
+                        //bookmarkController.getBookmarkList(username, recyclerView, posts);
                         break;
                     default:
                         Bookmark bookmark = adapter.getItem(position);
