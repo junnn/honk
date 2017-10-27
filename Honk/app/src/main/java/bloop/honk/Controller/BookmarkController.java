@@ -33,7 +33,7 @@ import bloop.honk.FavouritesComponents.BookmarkAdapter;
 //TRIED MAKING but complete failure
 public class BookmarkController {
     private static List<Bookmark> posts = new ArrayList<Bookmark>();
-    public static RequestQueue r;
+    public static RequestQueue r; //test
 
     private BookmarkAdapter adapter;
     private Activity activity;
