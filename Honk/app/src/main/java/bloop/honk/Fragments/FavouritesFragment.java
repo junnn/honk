@@ -63,26 +63,28 @@ public class FavouritesFragment extends Fragment {
             adapter = new BookmarkAdapter(getActivity(), posts);
             bookmarkController = new BookmarkController(getActivity(), adapter);
             bookmarkController.getBookmarkList(username, recyclerView, posts);
+
+            adapter.setClickListener(new BookmarkAdapter.ItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    switch (view.getId()) {
+                        case R.id.favImageButton:
+                            bookmarkController.deleteBookmark(username,posts,recyclerView, adapter.getItem(position).getName());
+                            //bookmarkController.getBookmarkList(username, recyclerView, posts);
+                            break;
+                        default:
+                            Bookmark bookmark = adapter.getItem(position);
+                            String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
+                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
+                    }
+                }
+            });
         }
 
-        adapter.setClickListener(new BookmarkAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                switch (view.getId()) {
-                    case R.id.favImageButton:
-                        bookmarkController.deleteBookmark(username,posts,recyclerView, adapter.getItem(position).getName());
-                        //bookmarkController.getBookmarkList(username, recyclerView, posts);
-                        break;
-                    default:
-                        Bookmark bookmark = adapter.getItem(position);
-                        String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
-                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
-                }
-            }
-        });
+
         return rootView;
     }
 
