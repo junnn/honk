@@ -19,9 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +30,7 @@ import java.util.Map;
 import bloop.honk.Controller.BookmarkController;
 import bloop.honk.FavouritesComponents.Bookmark;
 import bloop.honk.Config;
-import bloop.honk.FavouritesComponents.bookmarkAdapter;
+import bloop.honk.FavouritesComponents.BookmarkAdapter;
 import bloop.honk.LoginActivity;
 import bloop.honk.R;
 
@@ -41,15 +39,14 @@ import bloop.honk.R;
  */
 
 public class FavouritesFragment extends Fragment {
-    private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=";
-    private static final String delBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=deletebookmark";
-    private static List<Bookmark> posts;
+
+    private List<Bookmark> posts = new ArrayList<>();
     private Bookmark bob = new Bookmark("bob","1","2");
     private Gson gson;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
-    private static BookmarkController b;
-    private bookmarkAdapter adapter;
+    private static BookmarkController bookmarkController;
+    private BookmarkAdapter adapter;
     private SharedPreferences sharedPreferences;
     private String username;
 
@@ -67,78 +64,36 @@ public class FavouritesFragment extends Fragment {
         }
         else{
             username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
-            b = new BookmarkController(username,getActivity());
+
             recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            //b.getBookmark(username,getActivity());
-            posts = b.returnList();
-            adapter = new bookmarkAdapter(getActivity(), posts);
-            recyclerView.setAdapter(adapter);
-            // data to populate the RecyclerView with
+
+            adapter = new BookmarkAdapter(getActivity(), posts);
+            bookmarkController = new BookmarkController(getActivity(), adapter);
+            bookmarkController.getBookmark(username, recyclerView, posts);
         }
-        return rootView;
-    }
 
-    private void deleteBookmark(String bkmk) {
-        final String bookmark = bkmk;
-        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, delBk, new Response.Listener<String>() {
+        adapter.setClickListener(new BookmarkAdapter.ItemClickListener() {
             @Override
-            public void onResponse(String response) {
-                fetchPosts();
-                //This code is executed if the server responds, whether or not the response contains data.
-                //The String 'response' contains the server's response.
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //This code is executed if there is an error.
-            }
-        }) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<String, String>();
-                MyData.put("username", username); //Add the data you'd like to send to the server.
-                MyData.put("bookmarkname", bookmark);
-                return MyData;
-            }
-        };
-        requestQueue.add(MyStringRequest);
-    }
-
-
-    private void fetchPosts() {
-        StringRequest request = new StringRequest(Request.Method.GET, readBk + username, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                posts = Arrays.asList(gson.fromJson(response, Bookmark[].class));
-                adapter = new bookmarkAdapter(getActivity(), posts);
-                recyclerView.setAdapter(adapter);
-                adapter.setClickListener(new bookmarkAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        switch (view.getId()) {
-                            case R.id.favImageButton:
-                                deleteBookmark(adapter.getItem(position).getName());
-                                Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                Bookmark bookmark = adapter.getItem(position);
-                                String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
-                                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
-                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                mapIntent.setPackage("com.google.android.apps.maps");
-                                startActivity(mapIntent);
-                        }
-                    }
-                });
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("PostActivity", error.toString());
+            public void onItemClick(View view, int position) {
+                switch (view.getId()) {
+                    case R.id.favImageButton:
+                        bookmarkController.deleteBookmark(username, adapter.getItem(position).getName());
+                        Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+                        posts.clear();
+                        bookmarkController.getBookmark(username, recyclerView, posts);
+                        break;
+                    default:
+                        Bookmark bookmark = adapter.getItem(position);
+                        String latLng = bookmark.getLatitude() + "," + bookmark.getLongitude();
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng);
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                }
             }
         });
-        requestQueue.add(request);
+        return rootView;
     }
 
     @Override
