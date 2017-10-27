@@ -8,24 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bloop.honk.Controller.BookmarkController;
 import bloop.honk.FavouritesComponents.Bookmark;
@@ -70,7 +62,7 @@ public class FavouritesFragment extends Fragment {
 
             adapter = new BookmarkAdapter(getActivity(), posts);
             bookmarkController = new BookmarkController(getActivity(), adapter);
-            bookmarkController.getBookmark(username, recyclerView, posts);
+            bookmarkController.getBookmarkList(username, recyclerView, posts);
         }
 
         adapter.setClickListener(new BookmarkAdapter.ItemClickListener() {
@@ -79,9 +71,8 @@ public class FavouritesFragment extends Fragment {
                 switch (view.getId()) {
                     case R.id.favImageButton:
                         bookmarkController.deleteBookmark(username, adapter.getItem(position).getName());
-                        Toast.makeText(getActivity(), "You unbookmarked FavButton " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
                         posts.clear();
-                        bookmarkController.getBookmark(username, recyclerView, posts);
+                        bookmarkController.getBookmarkList(username, recyclerView, posts);
                         break;
                     default:
                         Bookmark bookmark = adapter.getItem(position);
