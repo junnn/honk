@@ -36,6 +36,7 @@ import bloop.honk.Fragments.FavouritesFragment;
 import bloop.honk.Fragments.FeedsFragment;
 import bloop.honk.Fragments.MapFragment;
 import bloop.honk.Fragments.NewsFragment;
+import bloop.honk.Fragments.oldNewsFragment;
 import bloop.honk.Model.Account;
 
 public class MainActivity extends AppCompatActivity
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         switch (itemId) {
             case R.id.nav_news:
                 fragment = new NewsFragment();
+                //fragment = new oldNewsFragment();
                 break;
             case R.id.nav_feed:
                 fragment = new FeedsFragment();
