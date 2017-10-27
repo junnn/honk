@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import bloop.honk.FeedsComponents.FeedItem;
 import bloop.honk.FeedsComponents.FeedsAdapter;
+import bloop.honk.FeedsComponents.TrafficFeedController;
 import bloop.honk.R;
 
 /**
@@ -37,14 +39,7 @@ import bloop.honk.R;
  */
 
 public class FeedsFragment extends Fragment {
-    public List<FeedItem> posts;
-
-    private Gson gson;
-
-    private static final String NTUENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
-
-    private RequestQueue requestQueue;
-
+    public List<FeedItem> posts = new ArrayList<>();
     private RecyclerView recyclerView;
 
     private FeedsAdapter adapter;
@@ -53,17 +48,14 @@ public class FeedsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feeds, container, false);
         getActivity().setTitle("Feeds");//set the title on the toolbar
-
+        adapter= new FeedsAdapter(getContext(), posts);
         recyclerView = view.findViewById(R.id.feedrecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        requestQueue = Volley.newRequestQueue(getActivity());
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
+        TrafficFeedController trafficFeedController = new TrafficFeedController(getActivity(), adapter);
 
         if (isNetworkConnected())
-            fetchPostsNTU();
+            trafficFeedController.fetchPostsNTU(recyclerView, posts);
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
@@ -74,26 +66,5 @@ public class FeedsFragment extends Fragment {
         final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
-    }
-
-    private void fetchPostsNTU() {
-        StringRequest request = new StringRequest(Request.Method.GET, NTUENDPOINT, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                posts = Arrays.asList(gson.fromJson(response, FeedItem[].class));
-
-                adapter = new FeedsAdapter(getActivity(), posts);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("PostActivity", error.toString());
-            }
-        });
-
-        requestQueue.add(request);
     }
 }
