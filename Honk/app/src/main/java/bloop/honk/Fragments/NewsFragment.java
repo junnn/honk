@@ -46,7 +46,7 @@ public class NewsFragment extends Fragment {
         else
             Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.swapAdapter(adapter, true);
 
         adapter.setClickListener(new NewsAdapter.ItemClickListener() {
             @Override

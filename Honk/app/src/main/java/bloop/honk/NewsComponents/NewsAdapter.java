@@ -2,6 +2,7 @@ package bloop.honk.NewsComponents;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,13 @@ import bloop.honk.R;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
     private Context context;
-    private List<News> data = Collections.emptyList();
+    public List<News> data = Collections.emptyList();
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     public NewsAdapter(Context context, List<News> data) {
         inflater = LayoutInflater.from(context);
+        data.clear();
         this.data = data;
         this.context = context;
     }
@@ -36,11 +38,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final News current = data.get(position);
-        holder.title.setText(current.getTitle());
-        holder.desc.setText(current.getSummary());
-        holder.date.setText(current.getPubDate());
-        //holder.type.setText(current.news_type);
+
+            final News current = data.get(position);
+            holder.title.setText(current.getTitle());
+            holder.desc.setText(current.getSummary());
+            holder.date.setText(current.getPubDate());
+            //holder.type.setText(current.news_type);
+
     }
 
     @Override
