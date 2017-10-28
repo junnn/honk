@@ -20,8 +20,4 @@ public class Admin extends Account {
         this.staffId = staffId;
     }
 
-    //TODO update implmentation
-    public boolean update(){
-        return true;
-    }
 }
