@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity
 
         if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
             account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
+
+            if(sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")){ //navigate to admin page
+                finish();
+                Intent intent = new Intent(this, AdminActivity.class);
+                startActivity(intent);
+            }
         }
         else{
             account = null;
@@ -121,6 +127,12 @@ public class MainActivity extends AppCompatActivity
             account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Log Out");
+
+            if(sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")){ //navigate to admin page
+                finish();
+                Intent intent = new Intent(this, AdminActivity.class);
+                startActivity(intent);
+            }
 
             /*Fragment fragment = new NewsFragment();
 
