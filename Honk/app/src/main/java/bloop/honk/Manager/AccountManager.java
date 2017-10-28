@@ -58,7 +58,7 @@ public class AccountManager {
                             //Saving values to editor
                             editor.apply();
 
-                            if(!response.equals("user")){
+                            if(response.equals("user")){
                                 Toast.makeText(activity, "Successfully login", Toast.LENGTH_SHORT).show();
                                 activity.finish();
                             }

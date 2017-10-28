@@ -23,4 +23,5 @@
     <string name="nav_quit">Quit</string>
     <string name="admin">Admin Page</string>
     <string name="log_out">Log out</string>
+    <string name="quit">Quit</string>
 </resources>
