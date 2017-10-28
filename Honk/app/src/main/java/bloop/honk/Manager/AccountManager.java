@@ -1,6 +1,7 @@
 package bloop.honk.Manager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Base64;
 import android.widget.Toast;
@@ -22,7 +23,10 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import bloop.honk.AdminActivity;
 import bloop.honk.Config;
+import bloop.honk.LoginActivity;
+import bloop.honk.MainActivity;
 import bloop.honk.Model.User;
 
 /**
@@ -54,13 +58,14 @@ public class AccountManager {
                             //Saving values to editor
                             editor.apply();
 
-                            if(response.equals("user")){
+                            if(!response.equals("user")){
                                 Toast.makeText(activity, "Successfully login", Toast.LENGTH_SHORT).show();
                                 activity.finish();
                             }
                             else{
-
-                                Toast.makeText(activity, "You're an admin.", Toast.LENGTH_SHORT).show();
+                                activity.finish();
+                                Intent intent = new Intent(activity, AdminActivity.class);
+                                activity.startActivity(intent);
                             }
                         }
                     }

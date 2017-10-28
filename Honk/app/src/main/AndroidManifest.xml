@@ -42,6 +42,10 @@
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".AdminActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 
