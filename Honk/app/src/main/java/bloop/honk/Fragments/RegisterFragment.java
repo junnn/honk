@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment {
                             authController.register(user, confirmPassword, getActivity(), sharedPreferences);
                         }
                         else {
-                            Toast.makeText(getContext(), "Please ensure password is aleast 6 characters long & is alpha/numeric", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Please ensure password is between 6 to 12 characters long & is alpha/numeric", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{

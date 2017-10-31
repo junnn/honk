@@ -12,7 +12,7 @@
     <string name="drawer_favourites">Favourites</string>
     <string name="drawer_login">Login</string>
     <string name="register_now">Don\'t have an account? Register now!</string>
-    <string name="username_hint"> Username</string>
+    <string name="username_hint"> Email Address</string>
     <string name="password_hint"> Password</string>
     <string name="welcome_to_honk">Welcome to !Honk</string>
     <string name="login">Login</string>
