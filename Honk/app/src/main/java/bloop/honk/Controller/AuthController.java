@@ -2,16 +2,7 @@ package bloop.honk.Controller;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
-import bloop.honk.Manager.AccountManager;
 import bloop.honk.Model.Account;
 import bloop.honk.Model.User;
 

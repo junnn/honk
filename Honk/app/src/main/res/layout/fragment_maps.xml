@@ -54,7 +54,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
             class="com.google.android.gms.maps.SupportMapFragment"
-            android:name="bloop.honk.Fragments.MapFragment"
+            android:name="bloop.honk.View.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
