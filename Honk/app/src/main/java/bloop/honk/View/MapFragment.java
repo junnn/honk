@@ -66,19 +66,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import bloop.honk.Controller.BookmarkController;
 import bloop.honk.Model.Config;
-import bloop.honk.MapComponents.GetAddressFromLatLng;
-import bloop.honk.MapComponents.MapWrapperLayout;
-import bloop.honk.MapComponents.OnInfoWindowElemTouchListener;
-import bloop.honk.MapComponents.PlacesAutoCompleteAdapter;
-import bloop.honk.MapComponents.PlacesItemClickListener;
+import bloop.honk.Controller.GetAddressFromLatLng;
+import bloop.honk.Model.MapPlace;
+import bloop.honk.Controller.OnInfoWindowElemTouchListener;
+import bloop.honk.Controller.PlacesAutoCompleteAdapter;
+import bloop.honk.Controller.PlacesItemClickListener;
+import bloop.honk.Controller.getPlacesController;
 import bloop.honk.R;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.API_NOT_CONNECTED;
-
-/**
- * Created by Jun Hao Ng on 6/9/2017.
- */
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, ResultCallback<LocationSettingsResult>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -196,47 +194,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                        String username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF, "invalid");
                         address = locAddress;
                         final double lat = Double.parseDouble(locLat);
                         final double lng = Double.parseDouble(locLng);
-                        final String ADD_BOOKMARK_POST = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=addbookmark";
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_BOOKMARK_POST, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                if(response.equalsIgnoreCase("unsucessful")){
-                                    Toast.makeText(getContext(), "Adding of Bookmark Failed", Toast.LENGTH_LONG).show();
-                                } else if(response.equalsIgnoreCase("duplicate")){
-                                    Toast.makeText(getContext(), "This bookmark already exist in your list", Toast.LENGTH_LONG).show();
-                                } else if(response.equalsIgnoreCase("success")){
-                                    Toast.makeText(getContext(), "You have added " + address + " into your Favourite List", Toast.LENGTH_SHORT).show();
-                                    Log.i("android", "address: " + address + " lat: " + lat + " lng: " + lng);
-                                } else {
-                                    Toast.makeText(getContext(),"Unknown Error Occurred!", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        }){
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                                String username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF, "invalid");
-                                Map<String,String> params = new HashMap<>();
-                                //Adding parameters to request
-                                params.put(Config.TAG_USERNAME, username);
-                                params.put("bookmarkname", address);
-                                params.put("latitude", Double.toString(lat));
-                                params.put("longtitude", Double.toString(lng));
-
-                                return params;
-                            }
-                        };
-                        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-                        requestQueue.add(stringRequest);
+                        BookmarkController bmController  = new BookmarkController(getActivity());
+                        bmController.addBookmark(username, address, lat, lng);
                     }
                 };
 
@@ -440,10 +404,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         AppCompatImageView delete=(AppCompatImageView) v.findViewById(R.id.crossImageView);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        final PlacesAutoCompleteAdapter mAutoCompleteAdapter =  new PlacesAutoCompleteAdapter(getActivity(), R.layout.searchview_adapter,
-                mGoogleApiClient, new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0)), new AutocompleteFilter.Builder().
-                setTypeFilter(Place.TYPE_COUNTRY).setCountry("SG").build());
+        final PlacesAutoCompleteAdapter mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getActivity(), R.layout.searchview_adapter);
+        final getPlacesController getPlacesController =  new getPlacesController(getActivity(), mGoogleApiClient, new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0)), new AutocompleteFilter.Builder().
+                setTypeFilter(Place.TYPE_COUNTRY).setCountry("SG").build(), mAutoCompleteAdapter);
 
         RecyclerView mRecyclerView=(RecyclerView) getView().findViewById(R.id.locationResultRecyclerView);
         LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity());
@@ -466,7 +429,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     settingText = false;
                 } else {
                     if (mGoogleApiClient.isConnected()) {
-                        mAutoCompleteAdapter.getFilter().filter(charSequence.toString());
+                        getPlacesController.getFilter().filter(charSequence.toString());
                     }else if(!mGoogleApiClient.isConnected()){
                         Toast.makeText(getActivity(), API_NOT_CONNECTED,Toast.LENGTH_SHORT).show();
                     }
@@ -481,7 +444,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     @Override
                     public void onItemClick(View view, int position) {
                         try {
-                            final PlacesAutoCompleteAdapter.PlaceAutocomplete item = mAutoCompleteAdapter.getItem(position);
+                            final MapPlace item = mAutoCompleteAdapter.getItem(position);
                             final String placeId = String.valueOf(item.placeId);
                             //Issue a request to the Places Geo Data API to retrieve a Place object with additional details about the place.
                             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi

@@ -1,4 +1,4 @@
-package bloop.honk.MapComponents;
+package bloop.honk.Controller;
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;

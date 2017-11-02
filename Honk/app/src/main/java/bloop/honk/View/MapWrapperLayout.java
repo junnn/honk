@@ -1,4 +1,4 @@
-package bloop.honk.MapComponents;
+package bloop.honk.View;
 
 import android.content.Context;
 import android.graphics.Point;

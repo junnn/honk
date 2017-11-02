@@ -42,7 +42,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <bloop.honk.MapComponents.MapWrapperLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <bloop.honk.View.MapWrapperLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map_relative_layout"
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </bloop.honk.MapComponents.MapWrapperLayout>
+    </bloop.honk.View.MapWrapperLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

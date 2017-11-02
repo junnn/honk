@@ -1,15 +1,9 @@
-package bloop.honk.MapComponents;
+package bloop.honk.Controller;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,33 +19,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import bloop.honk.R;
+import bloop.honk.Model.MapPlace;
 
-public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder> implements Filterable {
-    private ArrayList<PlaceAutocomplete> mResultList;
+public class getPlacesController implements Filterable {
     private GoogleApiClient mGoogleApiClient;
     private LatLngBounds mBounds;
     private AutocompleteFilter mPlaceFilter;
-
+    private PlacesAutoCompleteAdapter mAdapter;
     private Context mContext;
-    private int layout;
 
-    public PlacesAutoCompleteAdapter(Context context, int resource, GoogleApiClient googleApiClient,
-                                     LatLngBounds bounds, AutocompleteFilter filter) {
-        mContext = context;
-        layout = resource;
+    public getPlacesController(Context context, GoogleApiClient googleApiClient, LatLngBounds bounds, AutocompleteFilter filter, PlacesAutoCompleteAdapter placesAdapter) {
         mGoogleApiClient = googleApiClient;
         mBounds = bounds;
         mPlaceFilter = filter;
+        mAdapter = placesAdapter;
+        mContext = context;
     }
-
-    /**
-     * Sets the bounds for all subsequent queries.
-     */
-    public void setBounds(LatLngBounds bounds) {
-        mBounds = bounds;
-    }
-
     /**
      * Returns the filter for the current set of autocomplete results.
      */
@@ -64,7 +47,8 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 // Skip the autocomplete query if no constraints are given.
                 if (constraint != null) {
                     // Query the autocomplete API for the (constraint) search string.
-                    mResultList = getAutocomplete(constraint);
+                    ArrayList<MapPlace> mResultList = getAutocomplete(constraint);
+                    mAdapter.setmResultList(mResultList);
                     if (mResultList != null) {
                         // The API successfully returned results.
                         results.values = mResultList;
@@ -79,17 +63,17 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 if (results != null && results.count > 0)
                 {
                     // The API returned at least one result, update the data.
-                    notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 } else {
                     // The API did not return any results, invalidate the data set.
-                    notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         };
         return filter;
     }
 
-    private ArrayList<PlaceAutocomplete> getAutocomplete(CharSequence constraint) {
+    private ArrayList<MapPlace> getAutocomplete(CharSequence constraint) {
         if (mGoogleApiClient.isConnected()) {
             Log.i("", "Starting autocomplete query for: " + constraint);
 
@@ -125,8 +109,8 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
             ArrayList resultList = new ArrayList<>(autocompletePredictions.getCount());
             while (iterator.hasNext()) {
                 AutocompletePrediction prediction = iterator.next();
-                // Get the details of this prediction and copy it into a new PlaceAutocomplete object.
-                resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
+                // Get the details of this prediction and copy it into a new MapPlace object.
+                resultList.add(new MapPlace(prediction.getPlaceId(),
                         prediction.getFullText(null)));
             }
 
@@ -137,69 +121,5 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         }
         Log.e("", "Google API client is not connected for autocomplete query.");
         return null;
-    }
-
-    @Override
-    public PredictionHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = layoutInflater.inflate(layout, viewGroup, false);
-        PredictionHolder mPredictionHolder = new PredictionHolder(convertView);
-        return mPredictionHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(PredictionHolder mPredictionHolder, final int i) {
-        mPredictionHolder.mPrediction.setText(mResultList.get(i).description);
-    }
-
-    @Override
-    public int getItemCount() {
-        if(mResultList != null)
-            return mResultList.size();
-        else
-            return 0;
-    }
-
-    public void clearList() {
-        int size = getItemCount();
-        if(size > 0) {
-            mResultList.clear();
-            notifyItemRangeRemoved(0, size);
-        }
-    }
-
-    public PlaceAutocomplete getItem(int position) {
-        return mResultList.get(position);
-    }
-
-    public class PredictionHolder extends RecyclerView.ViewHolder {
-        private TextView mPrediction;
-        private RelativeLayout mRow;
-        public PredictionHolder(View itemView) {
-
-            super(itemView);
-            mPrediction = (TextView) itemView.findViewById(R.id.address);
-            mRow=(RelativeLayout)itemView.findViewById(R.id.predictedRow);
-        }
-
-    }
-
-    /**
-     * Holder for Places Geo Data Autocomplete API results.
-     */
-    public class PlaceAutocomplete {
-
-        public CharSequence placeId;
-        public CharSequence description;
-
-        PlaceAutocomplete(CharSequence placeId, CharSequence description) {
-            this.placeId = placeId;
-            this.description = description;
-        }
-
-        @Override
-        public String toString() {
-            return description.toString();
-        }
     }
 }

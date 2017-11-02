@@ -21,12 +21,16 @@ public class BookmarkController {
     private Activity activity;
     private BookmarkManager bkMan = new BookmarkManager();
 
+    public BookmarkController(Activity activity) {
+        this.activity = activity;
+    }
+
     public BookmarkController(Activity activity, BookmarkAdapter adapter) {
         this.activity = activity;
         this.adapter = adapter;
     }
-    public void addBookmark(String username,String address, double lat, double lng ,final String url) {
-        bkMan.addBookmark(username,address,lat,lng,url,activity);
+    public void addBookmark(String username,String address, double lat, double lng) {
+        bkMan.addBookmark(username,address,lat,lng,activity);
     }
     public void getBookmarkList(String username, final RecyclerView recyclerView, final List<Bookmark> posts) {
         bkMan.getBookmarkList(username, recyclerView, posts, activity, adapter);

@@ -1,4 +1,4 @@
-package bloop.honk.MapComponents;
+package bloop.honk.Controller;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import bloop.honk.Controller.DownloadUrl;
 import bloop.honk.View.MapFragment;
 import bloop.honk.R;
 

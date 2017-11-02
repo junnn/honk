@@ -1,4 +1,4 @@
-package bloop.honk.MapComponents;
+package bloop.honk.Controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -21,14 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import bloop.honk.Model.Bookmark;
+import bloop.honk.Model.Config;
 
 /**
  * Created by Bryan Boey S-15 on 28/10/2017.
  */
 
 public class BookmarkManager {
-    private static final String readBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getBookMark&username=";
-    private static final String delBk = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=deletebookmark";
     private static Gson gson;
 
     public void getBookmarkList(String username, final RecyclerView recyclerView, final List<Bookmark> posts, final Activity activity, final BookmarkAdapter adapter) {
@@ -37,13 +36,15 @@ public class BookmarkManager {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, readBk + username,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.GETBM_URL + username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
 
                         if (response.equals("[]")) {
+                            posts.clear();
+                            adapter.notifyItemRangeRemoved(0, 1);
                             Toast.makeText(activity.getApplicationContext(), "You currently have no bookmarks", Toast.LENGTH_SHORT).show();
                         } else {
                             if (posts.isEmpty()) {
@@ -70,7 +71,7 @@ public class BookmarkManager {
     public void deleteBookmark(final String username, final RecyclerView recyclerView, final List<Bookmark> posts, final String bkmk, final Activity activity, final BookmarkAdapter adapter) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, delBk, new Response.Listener<String>() {
+        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, Config.DELBM_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //fetchPosts();
@@ -95,10 +96,10 @@ public class BookmarkManager {
         requestQueue.add(MyStringRequest);
     }
 
-    public void addBookmark(final String username, final String address, final double lat, final double lng, final String url, final Activity activity) {
+    public void addBookmark(final String username, final String address, final double lat, final double lng, final Activity activity) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDBM_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.equalsIgnoreCase("unsucessful")) {
