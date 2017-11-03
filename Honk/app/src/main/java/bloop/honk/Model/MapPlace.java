@@ -1,8 +1,8 @@
 package bloop.honk.Model;
 
 public class MapPlace {
-    public CharSequence placeId;
-    public CharSequence description;
+    private CharSequence placeId;
+    private CharSequence description;
 
     public MapPlace(CharSequence placeId, CharSequence description) {
         this.placeId = placeId;
