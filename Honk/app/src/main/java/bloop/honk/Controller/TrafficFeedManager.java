@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import bloop.honk.Model.FeedItem;
+import bloop.honk.Model.Config;
 
 /**
  * Created by Don on 25/10/2017.
  */
 
 public class TrafficFeedManager {
-    private static final String ENDPOINT = "http://172.21.148.166/example/dao/Hookdaoimpl.php?function=getTrafficFeed";
     private Activity activity;
     private FeedsAdapter feedsAdapter;
     private RequestQueue requestQueue;
@@ -41,7 +41,7 @@ public class TrafficFeedManager {
         gson = gsonBuilder.create();
         requestQueue = Volley.newRequestQueue(activity);
 
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, Config.FEED_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 feedList.clear();

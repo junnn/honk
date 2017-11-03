@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 import bloop.honk.Model.CamItem;
+import bloop.honk.Model.Config;
 
 /**
  * Created by Don on 25/10/2017.
  */
 
 public class CameraManager {
-    private static final String ENDPOINT = "http://datamall2.mytransport.sg/ltaodataservice/Traffic-Images";
     private Activity activity;
     private CamsAdapter camsAdapter;
     private RequestQueue requestQueue;
@@ -47,7 +47,7 @@ public class CameraManager {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
 
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, Config.CAMERA_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 String json = response.substring(response.indexOf("["), response.length() - 1);
