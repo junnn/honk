@@ -23,9 +23,6 @@ import java.util.Map;
 import bloop.honk.Model.Bookmark;
 import bloop.honk.Model.Config;
 
-/**
- * Created by Bryan Boey S-15 on 28/10/2017.
- */
 
 public class BookmarkManager {
     private static Gson gson;
@@ -76,7 +73,7 @@ public class BookmarkManager {
             public void onResponse(String response) {
                 //fetchPosts();
 
-                //getBookmarkList(username, recyclerView, posts, activity, adapter);
+                getBookmarkList(username, recyclerView, posts, activity, adapter);
                 Toast.makeText(activity, "You unbookmarked FavButton " + bkmk, Toast.LENGTH_SHORT).show();
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
