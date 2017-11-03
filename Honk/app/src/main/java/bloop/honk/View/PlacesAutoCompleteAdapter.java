@@ -1,4 +1,4 @@
-package bloop.honk.Controller;
+package bloop.honk.View;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +33,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
     @Override
     public void onBindViewHolder(PredictionHolder mPredictionHolder, final int i) {
-        mPredictionHolder.mPrediction.setText(mResultList.get(i).description);
+        mPredictionHolder.mPrediction.setText(mResultList.get(i).toString());
     }
 
     @Override

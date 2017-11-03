@@ -9,6 +9,10 @@ public class MapPlace {
         this.description = description;
     }
 
+    public CharSequence getPlaceId() {
+        return placeId;
+    }
+
     @Override
     public String toString() {
         return description.toString();

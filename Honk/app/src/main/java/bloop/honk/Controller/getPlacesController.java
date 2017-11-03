@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import bloop.honk.Model.MapPlace;
+import bloop.honk.View.PlacesAutoCompleteAdapter;
 
 public class getPlacesController implements Filterable {
     private GoogleApiClient mGoogleApiClient;

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bloop.honk.Model.FeedItem;
-import bloop.honk.Controller.FeedsAdapter;
 import bloop.honk.Controller.TrafficFeedController;
 import bloop.honk.R;
 

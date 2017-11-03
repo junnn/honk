@@ -14,6 +14,7 @@ import java.util.List;
 
 import bloop.honk.Model.News;
 import bloop.honk.R;
+import bloop.honk.View.NewsAdapter;
 
 /**
  * Created by Don on 25/10/2017.

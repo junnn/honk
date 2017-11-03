@@ -1,4 +1,4 @@
-package bloop.honk.Controller;
+package bloop.honk.View;
 
 import android.content.Context;
 import android.location.Address;

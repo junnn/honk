@@ -22,6 +22,7 @@ import java.util.Map;
 
 import bloop.honk.Model.Bookmark;
 import bloop.honk.Model.Config;
+import bloop.honk.View.BookmarkAdapter;
 
 
 public class BookmarkManager {

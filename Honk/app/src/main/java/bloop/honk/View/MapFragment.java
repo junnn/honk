@@ -30,13 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -62,8 +55,6 @@ import com.google.android.gms.maps.model.Marker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import bloop.honk.Controller.BookmarkController;
@@ -71,7 +62,6 @@ import bloop.honk.Model.Config;
 import bloop.honk.Controller.GetAddressFromLatLng;
 import bloop.honk.Model.MapPlace;
 import bloop.honk.Controller.OnInfoWindowElemTouchListener;
-import bloop.honk.Controller.PlacesAutoCompleteAdapter;
 import bloop.honk.Controller.PlacesItemClickListener;
 import bloop.honk.Controller.getPlacesController;
 import bloop.honk.R;
@@ -445,7 +435,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                     public void onItemClick(View view, int position) {
                         try {
                             final MapPlace item = mAutoCompleteAdapter.getItem(position);
-                            final String placeId = String.valueOf(item.placeId);
+                            final String placeId = String.valueOf(item.getPlaceId());
                             //Issue a request to the Places Geo Data API to retrieve a Place object with additional details about the place.
                             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                                     .getPlaceById(mGoogleApiClient, placeId);

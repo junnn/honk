@@ -24,6 +24,7 @@ import java.util.Map;
 
 import bloop.honk.Model.CamItem;
 import bloop.honk.Model.Config;
+import bloop.honk.View.CamsAdapter;
 
 /**
  * Created by Don on 25/10/2017.

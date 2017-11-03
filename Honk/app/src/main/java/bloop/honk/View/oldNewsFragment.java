@@ -23,7 +23,6 @@ import java.net.URL;
 import java.util.List;
 
 import bloop.honk.Model.News;
-import bloop.honk.Controller.NewsAdapter;
 import bloop.honk.Controller.XmlParser;
 import bloop.honk.R;
 

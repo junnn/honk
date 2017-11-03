@@ -21,7 +21,6 @@ import java.util.List;
 import bloop.honk.Controller.BookmarkController;
 import bloop.honk.Model.Bookmark;
 import bloop.honk.Model.Config;
-import bloop.honk.Controller.BookmarkAdapter;
 import bloop.honk.R;
 
 /**

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import bloop.honk.Controller.NewsAdapter;
 import bloop.honk.Controller.NewsController;
 import bloop.honk.R;
 

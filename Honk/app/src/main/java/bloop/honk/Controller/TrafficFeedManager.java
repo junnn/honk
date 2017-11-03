@@ -18,6 +18,7 @@ import java.util.List;
 
 import bloop.honk.Model.FeedItem;
 import bloop.honk.Model.Config;
+import bloop.honk.View.FeedsAdapter;
 
 /**
  * Created by Don on 25/10/2017.
