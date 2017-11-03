@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 
 import bloop.honk.Model.Account;
+import bloop.honk.Model.AccountManager;
 import bloop.honk.Model.User;
 
 /**

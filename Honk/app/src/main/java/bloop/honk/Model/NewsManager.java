@@ -1,4 +1,4 @@
-package bloop.honk.Controller;
+package bloop.honk.Model;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import bloop.honk.Controller.XmlParser;
 import bloop.honk.Model.News;
 import bloop.honk.R;
 import bloop.honk.View.NewsAdapter;

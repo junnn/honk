@@ -6,6 +6,7 @@ import java.util.List;
 
 import bloop.honk.Model.News;
 import bloop.honk.Model.Config;
+import bloop.honk.Model.NewsManager;
 import bloop.honk.View.NewsAdapter;
 
 /**

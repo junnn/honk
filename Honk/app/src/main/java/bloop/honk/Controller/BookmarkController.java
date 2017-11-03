@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import java.util.List;
 
 import bloop.honk.Model.Bookmark;
+import bloop.honk.Model.BookmarkManager;
 import bloop.honk.View.BookmarkAdapter;
 
 /**

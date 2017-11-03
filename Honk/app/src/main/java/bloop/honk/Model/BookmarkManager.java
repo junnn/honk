@@ -1,4 +1,4 @@
-package bloop.honk.Controller;
+package bloop.honk.Model;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;

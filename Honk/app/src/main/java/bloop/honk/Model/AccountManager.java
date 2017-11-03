@@ -1,4 +1,4 @@
-package bloop.honk.Controller;
+package bloop.honk.Model;
 
 import android.app.Activity;
 import android.content.Intent;
