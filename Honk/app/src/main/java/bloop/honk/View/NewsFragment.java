@@ -18,7 +18,8 @@ import bloop.honk.R;
 
 
 public class NewsFragment extends Fragment {
-
+    private List<News> posts = new ArrayList<>();
+    
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
 
@@ -33,10 +34,13 @@ public class NewsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new NewsAdapter(getActivity(), con.getNewsList());
+        
+        adapter = new NewsAdapter(getActivity(), news);
 
         if (isNetworkConnected()) {
-            con.fetchNews(getActivity(), adapter);
+            NewsController con = new NewsController(getActivity(), adapter);
+            con.fetchNews(recyclerView);
+            //con.fetchNews(getActivity(), adapter);
 
             //new NewsManager.DownloadXmlTask(getActivity(), adapter).execute(URL);
             //task.execute(URL);
