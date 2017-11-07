@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import bloop.honk.Controller.AuthController;
-import bloop.honk.Model.Config;
-import bloop.honk.Model.Account;
-import bloop.honk.R;
 import bloop.honk.Controller.RegexHelper;
+import bloop.honk.Model.Account;
+import bloop.honk.Model.Config;
+import bloop.honk.R;
 
 /**
  * Created by Jun Hao Ng on 22/9/2017.
@@ -52,16 +52,14 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(usernameEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty()){
+                if (usernameEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), "Please ensure all fields are filled.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if(regexHelper.emailRegex(usernameEditText.getText().toString())){
+                } else {
+                    if (regexHelper.emailRegex(usernameEditText.getText().toString())) {
                         Account account = new Account(usernameEditText.getText().toString().trim(), passwordEditText.getText().toString().trim());
                         account.setPassword(authController.hashPassword(account));
                         authController.login(account, getActivity(), sharedPreferences);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getContext(), "Please ensure username is in correct email format", Toast.LENGTH_SHORT).show();
                     }
 
@@ -72,9 +70,8 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-
     //switch to register fragment
-    private void switchToRegisterFragment(){
+    private void switchToRegisterFragment() {
         Fragment fragment = new RegisterFragment();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.addToBackStack(null); //enable "backpress" to return to previous fragment
@@ -83,7 +80,7 @@ public class LoginFragment extends Fragment {
     }
 
     //initialise all buttons, edittext, textview & etc here
-    private void findAllViewById(View view){
+    private void findAllViewById(View view) {
 
         usernameEditText = view.findViewById(R.id.username_editText);
         passwordEditText = view.findViewById(R.id.password_editText);

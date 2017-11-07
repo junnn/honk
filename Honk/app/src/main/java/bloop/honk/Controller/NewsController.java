@@ -24,7 +24,7 @@ public class NewsController {
         this.adapter = adapter;
     }
 
-    public void fetchNews(final RecyclerView recyclerView, final List<News> news){
+    public void fetchNews(final RecyclerView recyclerView, final List<News> news) {
         newsMgr.fetchNews(recyclerView, activity, adapter, news);
     }
 }

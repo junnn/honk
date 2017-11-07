@@ -15,9 +15,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import bloop.honk.Controller.DownloadUrl;
-import bloop.honk.View.MapFragment;
 import bloop.honk.R;
+import bloop.honk.View.MapFragment;
 
 public class GetAddressFromLatLng extends AsyncTask<String, String, String> {
     private GoogleMap mMap;
@@ -47,7 +46,7 @@ public class GetAddressFromLatLng extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String data) {
-        if(data != null) {
+        if (data != null) {
             String address = "", lat = "", lng = "";
             try {
                 JSONObject jsonObject = new JSONObject(data);
@@ -66,14 +65,14 @@ public class GetAddressFromLatLng extends AsyncTask<String, String, String> {
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.favourite))
                     .draggable(true));
             mapfrag.setMarker(marker);
-            Log.i("android","Lat: " + lat + " Lng: " + lng);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)),zoomLevel));
+            Log.i("android", "Lat: " + lat + " Lng: " + lng);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)), zoomLevel));
             // Zoom in, animating the camera.
             mMap.animateCamera(CameraUpdateFactory.zoomIn());
 
             // Zoom out to zoom level 10, animating with a duration of 2 seconds.
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
-            if(setAddress) {
+            if (setAddress) {
                 mapfrag.setAddressET(address);
             }
             marker.showInfoWindow();

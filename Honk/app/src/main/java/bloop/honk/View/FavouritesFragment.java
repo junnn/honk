@@ -1,4 +1,5 @@
 package bloop.honk.View;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +31,7 @@ import bloop.honk.R;
 public class FavouritesFragment extends Fragment {
 
     private List<Bookmark> posts = new ArrayList<>();
-    private Bookmark bob = new Bookmark("bob","1","2");
+    private Bookmark bob = new Bookmark("bob", "1", "2");
     private Gson gson;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
@@ -47,12 +48,11 @@ public class FavouritesFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
+        if (!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == false
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
-        }
-        else{
-            username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF,""); //used this to get current username
+        } else {
+            username = sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""); //used this to get current username
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.postview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -66,7 +66,7 @@ public class FavouritesFragment extends Fragment {
                 public void onItemClick(View view, int position) {
                     switch (view.getId()) {
                         case R.id.favImageButton:
-                            bookmarkController.deleteBookmark(username,posts,recyclerView, adapter.getItem(position).getName());
+                            bookmarkController.deleteBookmark(username, posts, recyclerView, adapter.getItem(position).getName());
 
                             //bookmarkController.getBookmarkList(username, recyclerView, posts);
                             break;
@@ -87,9 +87,9 @@ public class FavouritesFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){ //if user press back on favourite, will redirect to news instead of favorite fragment
+    public void onResume() { //if user press back on favourite, will redirect to news instead of favorite fragment
         super.onResume();
-        if(!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+        if (!sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
             Fragment fragment = new NewsFragment();
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import bloop.honk.Model.MapPlace;
 import bloop.honk.R;
 
-public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder>  {
+public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder> {
     private ArrayList<MapPlace> mResultList;
     private Context mContext;
     private int layout;
@@ -38,7 +38,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
     @Override
     public int getItemCount() {
-        if(mResultList != null)
+        if (mResultList != null)
             return mResultList.size();
         else
             return 0;
@@ -46,7 +46,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
     public void clearList() {
         int size = getItemCount();
-        if(size > 0) {
+        if (size > 0) {
             mResultList.clear();
             notifyItemRangeRemoved(0, size);
         }
@@ -55,10 +55,11 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     public class PredictionHolder extends RecyclerView.ViewHolder {
         private TextView mPrediction;
         private RelativeLayout mRow;
+
         public PredictionHolder(View itemView) {
             super(itemView);
             mPrediction = (TextView) itemView.findViewById(R.id.address);
-            mRow=(RelativeLayout)itemView.findViewById(R.id.predictedRow);
+            mRow = (RelativeLayout) itemView.findViewById(R.id.predictedRow);
         }
 
     }

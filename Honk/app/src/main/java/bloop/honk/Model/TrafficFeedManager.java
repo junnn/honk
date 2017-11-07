@@ -16,8 +16,6 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-import bloop.honk.Model.FeedItem;
-import bloop.honk.Model.Config;
 import bloop.honk.View.FeedsAdapter;
 
 /**
@@ -30,7 +28,7 @@ public class TrafficFeedManager {
     private RequestQueue requestQueue;
     private Gson gson;
 
-    public TrafficFeedManager(Activity activity, FeedsAdapter feedsAdapter){
+    public TrafficFeedManager(Activity activity, FeedsAdapter feedsAdapter) {
         this.activity = activity;
         this.feedsAdapter = feedsAdapter;
     }
@@ -48,7 +46,6 @@ public class TrafficFeedManager {
                 feedList.clear();
                 feedList.addAll(Arrays.asList(gson.fromJson(response, FeedItem[].class)));
                 recyclerView.setAdapter(feedsAdapter);
-
             }
         }, new Response.ErrorListener() {
             @Override

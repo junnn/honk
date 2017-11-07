@@ -38,13 +38,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
-            final News current = data.get(position);
-            holder.title.setText(current.getTitle());
-            holder.desc.setText(current.getSummary());
-            holder.date.setText(current.getPubDate());
-            //holder.type.setText(current.news_type);
-
+        final News current = data.get(position);
+        holder.title.setText(current.getTitle());
+        holder.desc.setText(current.getSummary());
+        holder.date.setText(current.getPubDate());
+        //holder.type.setText(current.news_type);
     }
 
     @Override

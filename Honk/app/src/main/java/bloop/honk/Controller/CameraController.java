@@ -21,7 +21,7 @@ public class CameraController {
         man = new CameraManager(activity, feedsAdapter);
     }
 
-    public void fetchCams(RecyclerView recyclerView, List<CamItem> posts){
+    public void fetchCams(RecyclerView recyclerView, List<CamItem> posts) {
         man.fetchCams(recyclerView, posts);
     }
 }

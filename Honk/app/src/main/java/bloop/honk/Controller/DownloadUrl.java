@@ -24,8 +24,7 @@ public class DownloadUrl {
             StringBuffer sb = new StringBuffer();
 
             String line = "";
-            while((line = bufferedReader.readLine()) != null)
-            {
+            while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
 

@@ -31,14 +31,16 @@ public class BookmarkController {
         this.activity = activity;
         this.adapter = adapter;
     }
-    public void addBookmark(String username,String address, double lat, double lng) {
-        bkMan.addBookmark(username,address,lat,lng,activity);
+
+    public void addBookmark(String username, String address, double lat, double lng) {
+        bkMan.addBookmark(username, address, lat, lng, activity);
     }
+
     public void getBookmarkList(String username, final RecyclerView recyclerView, final List<Bookmark> posts) {
         bkMan.getBookmarkList(username, recyclerView, posts, activity, adapter);
     }
 
-    public void deleteBookmark(final String username,final List<Bookmark> posts, final RecyclerView recyclerView, final String bkmk) {
-        bkMan.deleteBookmark(username,recyclerView,posts, bkmk, activity,adapter);
+    public void deleteBookmark(final String username, final List<Bookmark> posts, final RecyclerView recyclerView, final String bkmk) {
+        bkMan.deleteBookmark(username, recyclerView, posts, bkmk, activity, adapter);
     }
 }

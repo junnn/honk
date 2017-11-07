@@ -11,11 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import bloop.honk.Controller.XmlParser;
-import bloop.honk.Model.News;
 import bloop.honk.R;
 import bloop.honk.View.NewsAdapter;
 
@@ -24,8 +22,8 @@ import bloop.honk.View.NewsAdapter;
  */
 
 public class NewsManager {
-   
-    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter, final List<News> news){
+
+    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter, final List<News> news) {
         new DownloadXmlTask(activity, adapter, recyclerView, news).execute(Config.NEWS_URL);
     }
 
@@ -57,7 +55,7 @@ public class NewsManager {
         @Override
         protected void onPostExecute(String result) {
             newsAdapter.notifyDataSetChanged();
-            recycler.setAdapter(newsAdapter);
+            //recycler.setAdapter(newsAdapter);
         }
     }
 

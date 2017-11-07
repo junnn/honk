@@ -36,6 +36,7 @@ public class getPlacesController implements Filterable {
         mAdapter = placesAdapter;
         mContext = context;
     }
+
     /**
      * Returns the filter for the current set of autocomplete results.
      */
@@ -61,8 +62,7 @@ public class getPlacesController implements Filterable {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0)
-                {
+                if (results != null && results.count > 0) {
                     // The API returned at least one result, update the data.
                     mAdapter.notifyDataSetChanged();
                 } else {

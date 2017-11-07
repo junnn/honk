@@ -15,8 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import bloop.honk.Model.CamItem;
 import bloop.honk.Controller.CameraController;
+import bloop.honk.Model.CamItem;
 import bloop.honk.R;
 
 /**

@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import bloop.honk.R;
-import bloop.honk.View.LoginFragment;
 
 /**
  * Created by Jun Hao Ng on 22/9/2017.

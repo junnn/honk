@@ -17,10 +17,10 @@ public class TrafficFeedController {
     private TrafficFeedManager man;
 
     public TrafficFeedController(Activity activity, FeedsAdapter feedsAdapter) {
-         man = new TrafficFeedManager(activity, feedsAdapter);
+        man = new TrafficFeedManager(activity, feedsAdapter);
     }
 
-    public void fetchPost(RecyclerView recyclerView, List<FeedItem> posts){
-         man.fetchPosts(recyclerView, posts);
+    public void fetchPost(RecyclerView recyclerView, List<FeedItem> posts) {
+        man.fetchPosts(recyclerView, posts);
     }
 }

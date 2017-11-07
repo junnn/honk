@@ -24,14 +24,14 @@ import bloop.honk.R;
  * Created by Don on 2017/10/02.
  */
 
-public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder>{
+public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder> {
     Context context;
     Geocoder geocoder;
     List<CamItem> data = Collections.emptyList();
     private LayoutInflater inflater;
     private CamsAdapter.ItemClickListener ClickListener;
 
-    public CamsAdapter(Context context, List<CamItem> data){
+    public CamsAdapter(Context context, List<CamItem> data) {
         geocoder = new Geocoder(context, Locale.getDefault());
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -40,7 +40,7 @@ public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder>{
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.camera_item, parent,false);
+        View view = inflater.inflate(R.layout.camera_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -56,7 +56,7 @@ public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder>{
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             //Log.i("PostActivity", current.getCameraID() + ": " + addresses.get(0));
-            String str = addresses.get(0).getAddressLine(0) +" "+ addresses.get(0).getThoroughfare();
+            String str = addresses.get(0).getAddressLine(0) + " " + addresses.get(0).getThoroughfare();
             holder.title.setText(str);
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder>{
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         ImageView cam_image;
 

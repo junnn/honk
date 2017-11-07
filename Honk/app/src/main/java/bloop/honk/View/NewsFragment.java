@@ -1,8 +1,5 @@
 package bloop.honk.View;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +19,7 @@ import bloop.honk.R;
 
 public class NewsFragment extends Fragment {
     private List<News> news = new ArrayList<>();
-    
+
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
 
@@ -34,7 +30,7 @@ public class NewsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        
+
         adapter = new NewsAdapter(getActivity(), news);
         NewsController con = new NewsController(getActivity(), adapter);
 

@@ -58,12 +58,12 @@ import org.json.JSONObject;
 import java.util.concurrent.ExecutionException;
 
 import bloop.honk.Controller.BookmarkController;
-import bloop.honk.Model.Config;
 import bloop.honk.Controller.GetAddressFromLatLng;
-import bloop.honk.Model.MapPlace;
 import bloop.honk.Controller.OnInfoWindowElemTouchListener;
 import bloop.honk.Controller.PlacesItemClickListener;
 import bloop.honk.Controller.getPlacesController;
+import bloop.honk.Model.Config;
+import bloop.honk.Model.MapPlace;
 import bloop.honk.R;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.API_NOT_CONNECTED;
@@ -137,14 +137,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         final Button infoLoginButton, infoFavButton;
         final ViewGroup infoWindow;
         final TextView infoTitle;
-        if(permissionGranted) {
-            if(mMap != null) {
+        if (permissionGranted) {
+            if (mMap != null) {
                 mMap.getUiSettings().setMapToolbarEnabled(false);
                 mapWrapperLayout.init(mMap, getPixelsFromDp(getActivity(), 39 + 20));
                 infoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.marker_info_layout, null);
-                infoTitle = (TextView)infoWindow.findViewById(R.id.addressTV);
-                infoLoginButton = (Button)infoWindow.findViewById(R.id.loginBtn);
-                infoFavButton = (Button)infoWindow.findViewById(R.id.favBtn);
+                infoTitle = (TextView) infoWindow.findViewById(R.id.addressTV);
+                infoLoginButton = (Button) infoWindow.findViewById(R.id.loginBtn);
+                infoFavButton = (Button) infoWindow.findViewById(R.id.favBtn);
 
                 final OnInfoWindowElemTouchListener infologinButtonListener = new OnInfoWindowElemTouchListener(infoLoginButton,
                         ContextCompat.getDrawable(getActivity(), R.drawable.login_norm),
@@ -152,7 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
                     @Override
                     protected void onClickConfirmed(View v, Marker markerz) {
-                        if(marker != null) {
+                        if (marker != null) {
                             marker.remove();
                         }
                         float zoom = mMap.getCameraPosition().zoom;
@@ -168,7 +168,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
                     @Override
                     protected void onClickConfirmed(View v, Marker markerz) {
-                        if(marker != null) {
+                        if (marker != null) {
                             marker.remove();
                         }
                         float zoom = mMap.getCameraPosition().zoom;
@@ -189,7 +189,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                         address = locAddress;
                         final double lat = Double.parseDouble(locLat);
                         final double lng = Double.parseDouble(locLng);
-                        BookmarkController bmController  = new BookmarkController(getActivity());
+                        BookmarkController bmController = new BookmarkController(getActivity());
                         bmController.addBookmark(username, address, lat, lng);
                     }
                 };
@@ -199,14 +199,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
-                    public void onMarkerDragStart(Marker marker) { }
+                    public void onMarkerDragStart(Marker marker) {
+                    }
 
                     @Override
-                    public void onMarkerDrag(Marker marker) { }
+                    public void onMarkerDrag(Marker marker) {
+                    }
 
                     @Override
                     public void onMarkerDragEnd(Marker markerDragged) {
-                        if(marker != null) {
+                        if (marker != null) {
                             marker.remove();
                         }
                         float zoom = mMap.getCameraPosition().zoom;
@@ -216,13 +218,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Override
-                    public View getInfoWindow(Marker marker) { return null; }
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
 
                     @Override
                     public View getInfoContents(Marker marker) {
                         LatLng latLng = marker.getPosition();
                         infoTitle.setText(marker.getTitle());
-                        if(isLogin) {
+                        if (isLogin) {
                             // do stuffs for user not isLogin
                             infofavButtonListener.setMarker(marker);
                             infoFavButton.setEnabled(true);
@@ -308,13 +312,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) { }
+    public void onConnected(@Nullable Bundle bundle) {
+    }
 
     @Override
-    public void onConnectionSuspended(int i) { }
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
     @Override
     public void onStart() {
@@ -325,20 +332,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     @Override
     public void onResume() {
         super.onResume();
-        if(permissionGranted) {
-            if(mGoogleApiClient.isConnected()) {
-                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
+        if (permissionGranted) {
+            if (mGoogleApiClient.isConnected()) {
+                if (sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
                     isLogin = true;
                 } else {
                     isLogin = false;
                 }
 
-                if(mMap != null) {
-                    if(marker != null) {
+                if (mMap != null) {
+                    if (marker != null) {
                         marker.remove();
                     }
                     getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, 15, false);
-                    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+                    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                     addressET.setEnabled(true);
                 }
             }
@@ -348,9 +355,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     @Override
     public void onPause() {
         super.onPause();
-        if(permissionGranted) {
-            if(mGoogleApiClient.isConnected())
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+        if (permissionGranted) {
+            if (mGoogleApiClient.isConnected())
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 
@@ -366,13 +373,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     @Override
     public void onLocationChanged(Location location) {
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if(latLng != null) {
-            if(mMap != null) {
-                if(marker != null) {
+        if (latLng != null) {
+            if (mMap != null) {
+                if (marker != null) {
                     marker.remove();
                 }
                 getAddressFromLatLng(latLng.latitude, latLng.longitude, mMap, 15, false);
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                 addressET.setEnabled(true);
             }
         }
@@ -391,15 +398,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
     public void setupAutoCompletePlaces() {
         addressET = (EditText) v.findViewById(R.id.addressET);
-        AppCompatImageView delete=(AppCompatImageView) v.findViewById(R.id.crossImageView);
+        AppCompatImageView delete = (AppCompatImageView) v.findViewById(R.id.crossImageView);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         final PlacesAutoCompleteAdapter mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getActivity(), R.layout.searchview_adapter);
-        final getPlacesController getPlacesController =  new getPlacesController(getActivity(), mGoogleApiClient, new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0)), new AutocompleteFilter.Builder().
+        final getPlacesController getPlacesController = new getPlacesController(getActivity(), mGoogleApiClient, new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0)), new AutocompleteFilter.Builder().
                 setTypeFilter(Place.TYPE_COUNTRY).setCountry("SG").build(), mAutoCompleteAdapter);
 
-        RecyclerView mRecyclerView=(RecyclerView) getView().findViewById(R.id.locationResultRecyclerView);
-        LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity());
+        RecyclerView mRecyclerView = (RecyclerView) getView().findViewById(R.id.locationResultRecyclerView);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAutoCompleteAdapter);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -411,23 +418,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
         addressET.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(settingText) {
+                if (settingText) {
                     settingText = false;
                 } else {
                     if (mGoogleApiClient.isConnected()) {
                         getPlacesController.getFilter().filter(charSequence.toString());
-                    }else if(!mGoogleApiClient.isConnected()){
-                        Toast.makeText(getActivity(), API_NOT_CONNECTED,Toast.LENGTH_SHORT).show();
+                    } else if (!mGoogleApiClient.isConnected()) {
+                        Toast.makeText(getActivity(), API_NOT_CONNECTED, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
         mRecyclerView.addOnItemTouchListener(
                 new PlacesItemClickListener(getActivity(), new PlacesItemClickListener.OnItemClickListener() {
@@ -445,7 +454,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                                     if (places.getCount() == 1) {
                                         //RecyclerView Item Clicked
                                         LatLng latLng = new LatLng(places.get(0).getLatLng().latitude, places.get(0).getLatLng().longitude);
-                                        if(marker != null) {
+                                        if (marker != null) {
                                             marker.remove();
                                         }
                                         float zoom = mMap.getCameraPosition().zoom;
@@ -459,9 +468,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
                                     places.release();
                                 }
                             });
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             Toast.makeText(getActivity(), "SOMETHING_WENT_WRONG", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -484,15 +491,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
 
     private static int getPixelsFromDp(FragmentActivity context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int)(dp * scale + 0.5f);
+        return (int) (dp * scale + 0.5f);
     }
 
     public void setAddressET(String address) {
         addressET.setText(address);
     }
 
-    private String getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress)
-    {
+    private String getAddressFromLatLng(double latitude, double longitude, GoogleMap mMap, float zoom, boolean setAddress) {
         String geocodeRequestUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&key=" + getResources().getString(R.string.google_maps_key);
 
         GetAddressFromLatLng getAddressFromLatLng = new GetAddressFromLatLng(this, mMap, zoom, setAddress);
@@ -507,7 +513,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
         return data;
     }
 
-    public void setPermissionGranted(boolean permissionGranted) { this.permissionGranted = permissionGranted; }
+    public void setPermissionGranted(boolean permissionGranted) {
+        this.permissionGranted = permissionGranted;
+    }
 
-    public void setAddress(String address) { this.address = address; }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

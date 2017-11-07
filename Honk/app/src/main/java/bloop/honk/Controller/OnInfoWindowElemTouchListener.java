@@ -30,19 +30,24 @@ public abstract class OnInfoWindowElemTouchListener implements View.OnTouchListe
     @Override
     public boolean onTouch(View vv, MotionEvent event) {
         if (0 <= event.getX() && event.getX() <= view.getWidth() &&
-                0 <= event.getY() && event.getY() <= view.getHeight())
-        {
+                0 <= event.getY() && event.getY() <= view.getHeight()) {
             switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN: startPress(); break;
+                case MotionEvent.ACTION_DOWN:
+                    startPress();
+                    break;
 
                 // We need to delay releasing of the view a little so it shows the pressed state on the screen
-                case MotionEvent.ACTION_UP: handler.postDelayed(confirmClickRunnable, 150); break;
+                case MotionEvent.ACTION_UP:
+                    handler.postDelayed(confirmClickRunnable, 150);
+                    break;
 
-                case MotionEvent.ACTION_CANCEL: endPress(); break;
-                default: break;
+                case MotionEvent.ACTION_CANCEL:
+                    endPress();
+                    break;
+                default:
+                    break;
             }
-        }
-        else {
+        } else {
             // If the touch goes outside of the view's area
             // (like when moving finger out of the pressed button)
             // just release the press
@@ -73,8 +78,7 @@ public abstract class OnInfoWindowElemTouchListener implements View.OnTouchListe
             if (marker != null)
                 marker.showInfoWindow();
             return true;
-        }
-        else
+        } else
             return false;
     }
 

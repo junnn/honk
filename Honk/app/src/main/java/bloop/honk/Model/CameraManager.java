@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bloop.honk.Model.CamItem;
-import bloop.honk.Model.Config;
 import bloop.honk.View.CamsAdapter;
 
 /**
@@ -36,7 +34,7 @@ public class CameraManager {
     private RequestQueue requestQueue;
     private Gson gson;
 
-    public CameraManager(Activity activity, CamsAdapter camsAdapter){
+    public CameraManager(Activity activity, CamsAdapter camsAdapter) {
         this.activity = activity;
         this.camsAdapter = camsAdapter;
     }

@@ -41,13 +41,10 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final FeedItem current = data.get(position);
         holder.title.setText(current.getType());
-        /*if(current.getType().equalsIgnoreCase("heavy traffic"))
-            holder.image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favstar));*/
         String msg = current.getMessage().substring(current.getMessage().indexOf(' ') + 1);
 
         holder.desc.setText(msg);
 
-        //String date_time = current.Message.substring(0, current.Message.indexOf(' '));
         String date_time = current.getDate_time();
 
         SimpleDateFormat spf = new SimpleDateFormat("(dd/MM)hh:mm");
@@ -70,14 +67,12 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         TextView title;
         TextView desc;
         TextView date;
-//        ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.listText);
             desc = itemView.findViewById(R.id.descText);
             date = itemView.findViewById(R.id.dateText);
-//            image = itemView.findViewById(R.id.imageView2);
         }
     }
 }

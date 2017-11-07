@@ -32,10 +32,10 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import bloop.honk.Model.Config;
 import bloop.honk.Controller.AuthController;
-import bloop.honk.R;
 import bloop.honk.Model.Account;
+import bloop.honk.Model.Config;
+import bloop.honk.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private final int REQUEST_CHECK_SETTINGS = 101;
     private MapFragment mapfrag = null;
-    private  Account account;
+    private Account account;
     private AuthController authController;
 
     @Override
@@ -63,16 +63,15 @@ public class MainActivity extends AppCompatActivity
         //Creating a shared preference
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+        if (sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
             account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
 
-            if(sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")){ //navigate to admin page
+            if (sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")) { //navigate to admin page
                 finish();
                 Intent intent = new Intent(this, AdminActivity.class);
                 startActivity(intent);
             }
-        }
-        else{
+        } else {
             account = null;
         }
 
@@ -109,7 +108,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -121,15 +119,16 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){
+        if (sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
             account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Log Out");
 
-            if(sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")){ //navigate to admin page
+            if (sharedPreferences.getString(Config.ROLE_SHARED_PREF, "").equals("admin")) { //navigate to admin page
                 finish();
                 Intent intent = new Intent(this, AdminActivity.class);
                 startActivity(intent);
@@ -141,14 +140,13 @@ public class MainActivity extends AppCompatActivity
             // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
             ft.replace(R.id.main_frame_container, fragment);
             ft.commit();*/
-        }
-        else{
+        } else {
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Login");
         }
     }
 
-    private void switchToSelectedFragment(int itemId){
+    private void switchToSelectedFragment(int itemId) {
 
         //creating fragment object
         Fragment fragment = null;
@@ -157,7 +155,6 @@ public class MainActivity extends AppCompatActivity
         switch (itemId) {
             case R.id.nav_news:
                 fragment = new NewsFragment();
-                //fragment = new oldNewsFragment();
                 break;
             case R.id.nav_feed:
                 fragment = new FeedsFragment();
@@ -173,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new FavouritesFragment();
                 break;
             case R.id.nav_login:
-                if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)){//if LOGGEDIN == true
+                if (sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {//if LOGGEDIN == true
                     account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
 
                     authController.logout(account, sharedPreferences);
@@ -184,8 +181,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(this, "Logged out...", Toast.LENGTH_SHORT).show();
                     fragment = new NewsFragment();
                     break;
-                }
-                else{
+                } else {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
@@ -242,7 +238,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_CANCELED && data !=null){
+        if (resultCode != RESULT_CANCELED && data != null) {
             switch (requestCode) {
                 // Check for the integer request code originally supplied to startResolutionForResult().
                 case REQUEST_CHECK_SETTINGS:
@@ -257,21 +253,21 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         } else {
-            if(mapfrag != null){
+            if (mapfrag != null) {
                 mapfrag.setPermissionGranted(false);
             }
             Toast.makeText(this, "This application requires LocationInfo Service to be turned on!", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void quitApp(){
+    public void quitApp() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Are you sure you want to quit?");
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
             }

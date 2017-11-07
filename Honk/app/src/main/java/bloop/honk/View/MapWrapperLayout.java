@@ -3,16 +3,12 @@ package bloop.honk.View;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-
-import bloop.honk.R;
 
 public class MapWrapperLayout extends RelativeLayout {
     /**

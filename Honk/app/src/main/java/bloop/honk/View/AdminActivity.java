@@ -12,10 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import bloop.honk.Model.Config;
 import bloop.honk.Controller.AuthController;
-import bloop.honk.R;
 import bloop.honk.Model.Account;
+import bloop.honk.Model.Config;
+import bloop.honk.R;
 
 /**
  * Created by Jun Hao Ng on 28/10/2017.
@@ -38,10 +38,9 @@ public class AdminActivity extends AppCompatActivity {
         //Creating a shared preference
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
+        if (sharedPreferences.getBoolean(Config.LOGGEDIN_SHARED_PREF, false)) {
             account = new Account(sharedPreferences.getString(Config.USERNAME_SHARED_PREF, ""));
-        }
-        else{
+        } else {
             account = null;
         }
 
@@ -59,6 +58,7 @@ public class AdminActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_header, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -68,21 +68,20 @@ public class AdminActivity extends AppCompatActivity {
             finish();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
-        else if(id == R.id.menuQuit){
+        } else if (id == R.id.menuQuit) {
             quitApp();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void quitApp(){
+    public void quitApp() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Are you sure you want to quit?");
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
             }
