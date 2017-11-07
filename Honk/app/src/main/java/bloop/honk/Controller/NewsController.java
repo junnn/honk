@@ -22,12 +22,9 @@ public class NewsController {
     public NewsController(Activity activity, NewsAdapter adapter) {
         this.activity = activity;
         this.adapter = adapter;
-
     }
 
-    public void fetchNews(RecyclerView recyclerView){
-        newMgr.fetchNews(recyclerView, activity, adapter)
-        //new NewsManager.DownloadXmlTask(activity, adapter).execute(Config.NEWS_URL);
+    public void fetchNews(final RecyclerView recyclerView){
+        newsMgr.fetchNews(recyclerView, activity, adapter)
     }
 }
-
