@@ -8,6 +8,7 @@ import java.util.List;
 import bloop.honk.Model.News;
 import bloop.honk.Model.NewsManager;
 import bloop.honk.View.NewsAdapter;
+import bloop.honk.View.NewsFragment;
 
 /**
  * Created by Don on 27/10/2017.
@@ -26,5 +27,9 @@ public class NewsController {
 
     public void fetchNews(final RecyclerView recyclerView, final List<News> news) {
         newsMgr.fetchNews(recyclerView, activity, adapter, news);
+    }
+
+    public void launchWebView(NewsFragment newsFragment, String url) {
+        newsMgr.launchWebView(newsFragment, url);
     }
 }

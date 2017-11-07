@@ -3,6 +3,9 @@ package bloop.honk.Model;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -15,7 +18,10 @@ import java.util.List;
 
 import bloop.honk.Controller.XmlParser;
 import bloop.honk.R;
+import bloop.honk.View.MainActivity;
 import bloop.honk.View.NewsAdapter;
+import bloop.honk.View.NewsFragment;
+import bloop.honk.View.WebViewFragment;
 
 /**
  * Created by Don on 25/10/2017.
@@ -25,6 +31,18 @@ public class NewsManager {
 
     public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter, final List<News> news) {
         new DownloadXmlTask(activity, adapter, recyclerView, news).execute(Config.NEWS_URL);
+    }
+
+    public void launchWebView(NewsFragment newsFragment, String url) {
+        Bundle bundle = new Bundle();
+        bundle.putString("Link", url);
+
+        Fragment fragment = new WebViewFragment();
+        fragment.setArguments(bundle);
+        FragmentTransaction ft = ((NewsFragment)newsFragment).getActivity().getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
+        ft.replace(R.id.main_frame_container, fragment);
+        ft.commit();
     }
 
     public static class DownloadXmlTask extends AsyncTask<String, Void, String> {

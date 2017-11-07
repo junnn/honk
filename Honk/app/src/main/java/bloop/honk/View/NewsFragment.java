@@ -22,6 +22,7 @@ public class NewsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
+    private NewsController con;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class NewsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         adapter = new NewsAdapter(getActivity(), news);
-        NewsController con = new NewsController(getActivity(), adapter);
+        con = new NewsController(getActivity(), adapter);
 
         con.fetchNews(recyclerView, news);
 
@@ -42,16 +43,7 @@ public class NewsFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 String url = "http://" + adapter.getItem(position).getLink();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("Link", url);
-
-                Fragment fragment = new WebViewFragment();
-                fragment.setArguments(bundle);
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
-                ft.replace(R.id.main_frame_container, fragment);
-                ft.commit();
+                con.launchWebView(NewsFragment.this, url);
             }
         });
 
