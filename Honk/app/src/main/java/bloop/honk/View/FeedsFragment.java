@@ -39,18 +39,8 @@ public class FeedsFragment extends Fragment {
 
         TrafficFeedController TrafficFeedController = new TrafficFeedController(getActivity(), adapter);
 
-        if (isNetworkConnected())
-            TrafficFeedController.fetchPost(recyclerView,posts);
-
-        else
-            Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
+        TrafficFeedController.fetchPost(recyclerView,posts);
 
         return view;
-    }
-
-    public boolean isNetworkConnected() {
-        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
     }
 }

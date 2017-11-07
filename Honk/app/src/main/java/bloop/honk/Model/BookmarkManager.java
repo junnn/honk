@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bloop.honk.Model.Bookmark;
-import bloop.honk.Model.Config;
 import bloop.honk.View.BookmarkAdapter;
 
 

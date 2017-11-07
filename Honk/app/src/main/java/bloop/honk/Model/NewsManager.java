@@ -1,7 +1,9 @@
 package bloop.honk.Model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -22,29 +24,29 @@ import bloop.honk.View.NewsAdapter;
  */
 
 public class NewsManager {
-
-    private static List<News> newsList = new ArrayList<>();
    
-    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter){
-        new DownloadXmlTask(activity, adapter, recyclerView).execute(Config.NEWS_URL);
+    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter, final List<News> news){
+        new DownloadXmlTask(activity, adapter, recyclerView, news).execute(Config.NEWS_URL);
     }
 
     public static class DownloadXmlTask extends AsyncTask<String, Void, String> {
 
         private Context context;
         private NewsAdapter newsAdapter;
-        private recyclerView recycler;
+        private RecyclerView recycler;
+        private List<News> news;
 
-        public DownloadXmlTask(Context context, NewsAdapter newsAdapter, RecyclerView, recyclerView) {
+        public DownloadXmlTask(Context context, NewsAdapter newsAdapter, RecyclerView recyclerView, List<News> news) {
             this.context = context;
             this.newsAdapter = newsAdapter;
             this.recycler = recyclerView;
+            this.news = news;
         }
 
         @Override
         protected String doInBackground(String... urls) {
             try {
-                return loadXmlFromNetwork(urls[0]);
+                return loadXmlFromNetwork(urls[0], news);
             } catch (IOException e) {
                 return context.getResources().getString(R.string.connection_error);
             } catch (XmlPullParserException e) {
@@ -55,18 +57,18 @@ public class NewsManager {
         @Override
         protected void onPostExecute(String result) {
             newsAdapter.notifyDataSetChanged();
-            recyclerView.setAdapter(newsAdapter);
+            recycler.setAdapter(newsAdapter);
         }
     }
 
-    private static String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    private static String loadXmlFromNetwork(String urlString, List<News> news) throws XmlPullParserException, IOException {
         InputStream stream = null;
         XmlParser XmlParser = new XmlParser();
-        newsList.clear();
+        news.clear();
 
         try {
             stream = downloadUrl(urlString);
-            newsList.addAll(XmlParser.parse(stream));
+            news.addAll(XmlParser.parse(stream));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

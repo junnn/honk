@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (!isNetworkConnected())
+            Toast.makeText(this, "No Network", Toast.LENGTH_SHORT).show();
 
         //handle SSLHandshakeException due to Self-signed server certificate
         handleSSLHandshake();
@@ -281,4 +286,9 @@ public class MainActivity extends AppCompatActivity
         alertDialogBuilder.create().show();
     }
 
+    public boolean isNetworkConnected() {
+        final ConnectivityManager conMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
+    }
 }

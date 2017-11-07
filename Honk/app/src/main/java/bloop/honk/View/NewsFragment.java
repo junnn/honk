@@ -13,7 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bloop.honk.Controller.NewsController;
+import bloop.honk.Model.News;
 import bloop.honk.R;
 
 
@@ -23,28 +27,20 @@ public class NewsFragment extends Fragment {
     private RecyclerView recyclerView;
     private NewsAdapter adapter;
 
-    //List<News> newsList = new ArrayList<News>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         getActivity().setTitle("News");//set the title on the toolbar
-
-        NewsController con = new NewsController(getActivity());
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         
         adapter = new NewsAdapter(getActivity(), news);
         NewsController con = new NewsController(getActivity(), adapter);
-        
-        if (isNetworkConnected()) {
-            con.fetchNews(recyclerView);
-        }
-        else
-            Toast.makeText(getActivity(), "No Network", Toast.LENGTH_SHORT).show();
 
-        recyclerView.swapAdapter(adapter, true);
+        con.fetchNews(recyclerView, news);
+
+        recyclerView.setAdapter(adapter);
 
         adapter.setClickListener(new NewsAdapter.ItemClickListener() {
             @Override
@@ -65,11 +61,4 @@ public class NewsFragment extends Fragment {
 
         return view;
     }
-
-    public boolean isNetworkConnected() {
-        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.getState() == NetworkInfo.State.CONNECTED;
-    }
-
 }
