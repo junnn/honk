@@ -15,18 +15,19 @@ import bloop.honk.View.NewsAdapter;
 
 public class NewsController {
 
-    private NewsManager man;
+    private NewsAdapter adapter;
+    private Activity activity;
+    private NewsManager newsMgr = new NewsManager();
 
-    public NewsController(Activity activity) {
-        man = new NewsManager(activity);
+    public NewsController(Activity activity, NewsAdapter adapter) {
+        this.activity = activity;
+        this.adapter = adapter;
+
     }
 
-    public void fetchNews(Activity activity, NewsAdapter adapter){
-        new NewsManager.DownloadXmlTask(activity, adapter).execute(Config.NEWS_URL);
-    }
-
-    public List<News> getNewsList() {
-        return man.getNewsList();
+    public void fetchNews(RecyclerView recyclerView){
+        newMgr.fetchNews(recyclerView, activity, adapter)
+        //new NewsManager.DownloadXmlTask(activity, adapter).execute(Config.NEWS_URL);
     }
 }
 
