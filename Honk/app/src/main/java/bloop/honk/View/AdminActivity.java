@@ -17,10 +17,6 @@ import bloop.honk.Model.Account;
 import bloop.honk.Model.Config;
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 28/10/2017.
- */
-
 public class AdminActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private Menu menu;
@@ -46,7 +42,6 @@ public class AdminActivity extends AppCompatActivity {
 
         Fragment fragment = new AdminFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
         ft.replace(R.id.admin_frame_container, fragment);
         ft.commit();
     }

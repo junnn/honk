@@ -1,9 +1,5 @@
 package bloop.honk.Model;
 
-/**
- * Created by Bryan Boey S-15 on 2/10/2017.
- */
-
 import com.google.gson.annotations.SerializedName;
 
 public class Bookmark {

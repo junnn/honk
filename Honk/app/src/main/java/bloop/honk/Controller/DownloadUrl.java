@@ -40,4 +40,13 @@ public class DownloadUrl {
         }
         return data;
     }
+
+    public InputStream readXML(String url) throws IOException {
+        HttpURLConnection urlConnection = null;
+
+        URL _url = new URL(url);
+        urlConnection = (HttpURLConnection) _url.openConnection();
+        urlConnection.connect();
+        return urlConnection.getInputStream();
+    }
 }

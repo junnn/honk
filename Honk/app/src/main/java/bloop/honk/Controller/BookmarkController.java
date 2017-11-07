@@ -12,12 +12,8 @@ import bloop.honk.Model.Bookmark;
 import bloop.honk.Model.BookmarkManager;
 import bloop.honk.View.BookmarkAdapter;
 
-/**
- * Created by Bryan Boey S-15 on 22/10/2017.
- */
-//TRIED MAKING but complete failure
 public class BookmarkController {
-    public static RequestQueue r; //test
+    public static RequestQueue r;
 
     private BookmarkAdapter adapter;
     private Activity activity;

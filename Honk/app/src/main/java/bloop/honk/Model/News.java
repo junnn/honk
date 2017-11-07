@@ -1,9 +1,5 @@
 package bloop.honk.Model;
 
-/**
- * Created by Don on 2017/10/15.
- */
-
 public class News {
 
     private String title;

@@ -1,9 +1,5 @@
 package bloop.honk.Model;
 
-/**
- * Created by Jun Hao Ng on 21/10/2017.
- */
-
 public class Admin extends Account {
 
     private String staffId;

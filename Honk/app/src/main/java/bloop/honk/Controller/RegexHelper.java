@@ -3,10 +3,6 @@ package bloop.honk.Controller;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Jun Hao Ng on 27/10/2017.
- */
-
 public class RegexHelper {
     public RegexHelper() {
     }

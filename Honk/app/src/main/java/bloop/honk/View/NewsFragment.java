@@ -2,7 +2,6 @@ package bloop.honk.View;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,17 +26,16 @@ public class NewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        getActivity().setTitle("News");//set the title on the toolbar
+        getActivity().setTitle("News");
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         adapter = new NewsAdapter(getActivity(), news);
+        recyclerView.setAdapter(adapter);
         con = new NewsController(getActivity(), adapter);
 
-        con.fetchNews(recyclerView, news);
-
-        recyclerView.setAdapter(adapter);
+        con.fetchNews(news);
 
         adapter.setClickListener(new NewsAdapter.ItemClickListener() {
             @Override

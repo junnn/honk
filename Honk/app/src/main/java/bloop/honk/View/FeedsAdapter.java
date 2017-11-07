@@ -15,10 +15,6 @@ import java.util.List;
 import bloop.honk.Model.FeedItem;
 import bloop.honk.R;
 
-/**
- * Created by Don on 2017/10/02.
- */
-
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
 
     private List<FeedItem> data = Collections.emptyList();

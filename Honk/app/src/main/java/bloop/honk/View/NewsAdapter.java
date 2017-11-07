@@ -13,10 +13,6 @@ import java.util.List;
 import bloop.honk.Model.News;
 import bloop.honk.R;
 
-/**
- * Created by Don on 2017/09/23.
- */
-
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
     private Context context;
     public List<News> data = Collections.emptyList();
@@ -42,7 +38,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         holder.title.setText(current.getTitle());
         holder.desc.setText(current.getSummary());
         holder.date.setText(current.getPubDate());
-        //holder.type.setText(current.news_type);
     }
 
     @Override
@@ -54,14 +49,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         TextView title;
         TextView desc;
         TextView date;
-        //TextView type;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.listText);
             desc = itemView.findViewById(R.id.descText);
             date = itemView.findViewById(R.id.dateText);
-            //type = itemView.findViewById(R.id.news_type);
             itemView.setOnClickListener(this);
         }
 

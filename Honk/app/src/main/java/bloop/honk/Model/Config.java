@@ -1,9 +1,5 @@
 package bloop.honk.Model;
 
-/**
- * Created by Jun Hao Ng on 22/9/2017.
- */
-
 public class Config {
     //SHARED PREFERENCE CONFIG
     //name of our shared preferences

@@ -10,10 +10,6 @@ import android.webkit.WebViewClient;
 
 import bloop.honk.R;
 
-/**
- * Created by Don on 21/10/2017.
- */
-
 public class WebViewFragment extends Fragment {
     WebView webView;
 

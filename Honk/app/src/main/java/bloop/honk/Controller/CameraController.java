@@ -10,10 +10,6 @@ import bloop.honk.Model.CameraManager;
 import bloop.honk.View.CamsAdapter;
 
 
-/**
- * Created by Don on 27/10/2017.
- */
-
 public class CameraController {
     private CameraManager man;
 

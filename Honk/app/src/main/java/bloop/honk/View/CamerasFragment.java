@@ -19,10 +19,6 @@ import bloop.honk.Controller.CameraController;
 import bloop.honk.Model.CamItem;
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 6/9/2017.
- */
-
 public class CamerasFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -34,7 +30,7 @@ public class CamerasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cameras, container, false);
-        getActivity().setTitle("Cameras");//set the title on the toolbar
+        getActivity().setTitle("Cameras");
 
 
         camsAdapter = new CamsAdapter(getActivity(), cams);

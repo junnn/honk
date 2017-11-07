@@ -1,7 +1,6 @@
 package bloop.honk.Controller;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
@@ -10,23 +9,20 @@ import bloop.honk.Model.NewsManager;
 import bloop.honk.View.NewsAdapter;
 import bloop.honk.View.NewsFragment;
 
-/**
- * Created by Don on 27/10/2017.
- */
-
 public class NewsController {
 
     private NewsAdapter adapter;
     private Activity activity;
-    private NewsManager newsMgr = new NewsManager();
+    private NewsManager newsMgr;
 
     public NewsController(Activity activity, NewsAdapter adapter) {
         this.activity = activity;
         this.adapter = adapter;
+        this.newsMgr = new NewsManager();
     }
 
-    public void fetchNews(final RecyclerView recyclerView, final List<News> news) {
-        newsMgr.fetchNews(recyclerView, activity, adapter, news);
+    public void fetchNews(final List<News> news) {
+        newsMgr.fetchNews(activity, adapter, news);
     }
 
     public void launchWebView(NewsFragment newsFragment, String url) {

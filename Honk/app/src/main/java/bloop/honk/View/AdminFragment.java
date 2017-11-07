@@ -9,10 +9,6 @@ import android.widget.Toast;
 
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 28/10/2017.
- */
-
 public class AdminFragment extends Fragment {
 
     @Override

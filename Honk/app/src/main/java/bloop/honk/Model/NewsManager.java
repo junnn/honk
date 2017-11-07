@@ -6,31 +6,24 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
+import bloop.honk.Controller.DownloadUrl;
 import bloop.honk.Controller.XmlParser;
 import bloop.honk.R;
-import bloop.honk.View.MainActivity;
 import bloop.honk.View.NewsAdapter;
 import bloop.honk.View.NewsFragment;
 import bloop.honk.View.WebViewFragment;
 
-/**
- * Created by Don on 25/10/2017.
- */
-
 public class NewsManager {
 
-    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter, final List<News> news) {
-        new DownloadXmlTask(activity, adapter, recyclerView, news).execute(Config.NEWS_URL);
+    public void fetchNews(Activity activity, NewsAdapter adapter, List<News> news) {
+        new DownloadXmlTask(activity, adapter, news).execute(Config.NEWS_URL);
     }
 
     public void launchWebView(NewsFragment newsFragment, String url) {
@@ -46,16 +39,13 @@ public class NewsManager {
     }
 
     public static class DownloadXmlTask extends AsyncTask<String, Void, String> {
-
         private Context context;
         private NewsAdapter newsAdapter;
-        private RecyclerView recycler;
         private List<News> news;
 
-        public DownloadXmlTask(Context context, NewsAdapter newsAdapter, RecyclerView recyclerView, List<News> news) {
+        public DownloadXmlTask(Context context, NewsAdapter newsAdapter, List<News> news) {
             this.context = context;
             this.newsAdapter = newsAdapter;
-            this.recycler = recyclerView;
             this.news = news;
         }
 
@@ -73,7 +63,6 @@ public class NewsManager {
         @Override
         protected void onPostExecute(String result) {
             newsAdapter.notifyDataSetChanged();
-            //recycler.setAdapter(newsAdapter);
         }
     }
 
@@ -81,9 +70,9 @@ public class NewsManager {
         InputStream stream = null;
         XmlParser XmlParser = new XmlParser();
         news.clear();
-
+        DownloadUrl downloadUrl = new DownloadUrl();
         try {
-            stream = downloadUrl(urlString);
+            stream = downloadUrl.readXML(urlString);
             news.addAll(XmlParser.parse(stream));
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,17 +84,5 @@ public class NewsManager {
             }
         }
         return "";
-    }
-
-    private static InputStream downloadUrl(String urlString) throws IOException {
-        java.net.URL url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(10000 /* milliseconds */);
-        conn.setConnectTimeout(15000 /* milliseconds */);
-        conn.setRequestMethod("GET");
-        conn.setDoInput(true);
-        // Starts the query
-        conn.connect();
-        return conn.getInputStream();
     }
 }

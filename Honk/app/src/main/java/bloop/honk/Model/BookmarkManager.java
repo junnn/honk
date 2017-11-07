@@ -22,7 +22,6 @@ import java.util.Map;
 
 import bloop.honk.View.BookmarkAdapter;
 
-
 public class BookmarkManager {
     private static Gson gson;
 
@@ -36,8 +35,6 @@ public class BookmarkManager {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-
                         if (response.equals("[]")) {
                             posts.clear();
                             adapter.notifyItemRangeRemoved(0, 1);
@@ -48,10 +45,7 @@ public class BookmarkManager {
                             }
                             posts.clear();
                             posts.addAll(Arrays.asList(gson.fromJson(response, Bookmark[].class)));
-                            //adapter = new BookmarkAdapter(activity, posts);
                             recyclerView.setAdapter(adapter);// data to populate the RecyclerView with
-                            //adapter.notifyDataSetChanged();
-
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -60,7 +54,7 @@ public class BookmarkManager {
 
             }
         });
-// Add the request to the RequestQueue.
+        // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
@@ -70,8 +64,6 @@ public class BookmarkManager {
         StringRequest MyStringRequest = new StringRequest(Request.Method.POST, Config.DELBM_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //fetchPosts();
-
                 getBookmarkList(username, recyclerView, posts, activity, adapter);
                 Toast.makeText(activity, "You unbookmarked FavButton " + bkmk, Toast.LENGTH_SHORT).show();
                 //This code is executed if the server responds, whether or not the response contains data.

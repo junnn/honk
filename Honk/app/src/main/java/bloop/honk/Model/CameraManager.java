@@ -24,10 +24,6 @@ import java.util.Map;
 
 import bloop.honk.View.CamsAdapter;
 
-/**
- * Created by Don on 25/10/2017.
- */
-
 public class CameraManager {
     private Activity activity;
     private CamsAdapter camsAdapter;
@@ -72,7 +68,6 @@ public class CameraManager {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                //Map<String, String> params = new HashMap<String, String>();
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("AccountKey", "prxNO+dOSVaCs0F5/UX0rw==");
                 headers.put("accept", "application/json");

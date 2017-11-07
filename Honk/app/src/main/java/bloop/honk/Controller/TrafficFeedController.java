@@ -9,10 +9,6 @@ import bloop.honk.Model.FeedItem;
 import bloop.honk.Model.TrafficFeedManager;
 import bloop.honk.View.FeedsAdapter;
 
-/**
- * Created by Don on 27/10/2017.
- */
-
 public class TrafficFeedController {
     private TrafficFeedManager man;
 

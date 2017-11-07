@@ -20,10 +20,6 @@ import java.util.Locale;
 import bloop.honk.Model.CamItem;
 import bloop.honk.R;
 
-/**
- * Created by Don on 2017/10/02.
- */
-
 public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder> {
     Context context;
     Geocoder geocoder;
@@ -61,14 +57,6 @@ public class CamsAdapter extends RecyclerView.Adapter<CamsAdapter.MyViewHolder> 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        holder.itemView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                Toast.makeText(context, current.getCameraID(), Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
     }
 
     @Override

@@ -1,9 +1,5 @@
 package bloop.honk.Model;
 
-/**
- * Created by Don on 2017/10/13.
- */
-
 public class CamItem {
     private String CameraID;
     private Double Latitude;

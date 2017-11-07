@@ -7,10 +7,6 @@ import bloop.honk.Model.Account;
 import bloop.honk.Model.AccountManager;
 import bloop.honk.Model.User;
 
-/**
- * Created by Jun Hao Ng on 21/10/2017.
- */
-
 public class AuthController {
     private AccountManager accountManager = new AccountManager();
 

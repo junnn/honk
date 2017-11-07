@@ -15,10 +15,6 @@ import bloop.honk.Controller.TrafficFeedController;
 import bloop.honk.Model.FeedItem;
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 6/9/2017.
- */
-
 public class FeedsFragment extends Fragment {
     public List<FeedItem> posts = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -28,7 +24,7 @@ public class FeedsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feeds, container, false);
-        getActivity().setTitle("Feeds");//set the title on the toolbar
+        getActivity().setTitle("Feeds");
         adapter = new FeedsAdapter(getContext(), posts);
         recyclerView = view.findViewById(R.id.feedrecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -24,10 +24,6 @@ import bloop.honk.Model.Bookmark;
 import bloop.honk.Model.Config;
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 6/9/2017.
- */
-
 public class FavouritesFragment extends Fragment {
 
     private List<Bookmark> posts = new ArrayList<>();
@@ -67,8 +63,6 @@ public class FavouritesFragment extends Fragment {
                     switch (view.getId()) {
                         case R.id.favImageButton:
                             bookmarkController.deleteBookmark(username, posts, recyclerView, adapter.getItem(position).getName());
-
-                            //bookmarkController.getBookmarkList(username, recyclerView, posts);
                             break;
                         default:
                             Bookmark bookmark = adapter.getItem(position);
@@ -93,7 +87,6 @@ public class FavouritesFragment extends Fragment {
             Fragment fragment = new NewsFragment();
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
             ft.replace(R.id.main_frame_container, fragment);
             ft.commit();
         }

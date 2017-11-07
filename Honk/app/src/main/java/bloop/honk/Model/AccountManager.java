@@ -25,10 +25,6 @@ import javax.crypto.spec.PBEKeySpec;
 
 import bloop.honk.View.AdminActivity;
 
-/**
- * Created by Jun Hao Ng on 28/10/2017.
- */
-
 public class AccountManager {
     public AccountManager() {
     }

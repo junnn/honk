@@ -18,10 +18,6 @@ import java.util.List;
 
 import bloop.honk.View.FeedsAdapter;
 
-/**
- * Created by Don on 25/10/2017.
- */
-
 public class TrafficFeedManager {
     private Activity activity;
     private FeedsAdapter feedsAdapter;

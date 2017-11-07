@@ -2,10 +2,6 @@ package bloop.honk.Model;
 
 import java.util.Date;
 
-/**
- * Created by Jun Hao Ng on 21/10/2017.
- */
-
 public class User extends Account {
 
     private Date dateCreated;

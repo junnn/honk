@@ -19,10 +19,6 @@ import bloop.honk.Model.Account;
 import bloop.honk.Model.Config;
 import bloop.honk.R;
 
-/**
- * Created by Jun Hao Ng on 22/9/2017.
- */
-
 public class LoginFragment extends Fragment {
     private TextView registerLink;
     private EditText usernameEditText, passwordEditText;

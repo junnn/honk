@@ -123,7 +123,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ResultC
     }
 
     private void setupLocationRequest() {
-        // 18sec per request for 12hours usage
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(1000);

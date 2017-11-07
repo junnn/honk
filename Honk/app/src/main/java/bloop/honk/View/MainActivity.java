@@ -133,13 +133,6 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(this, AdminActivity.class);
                 startActivity(intent);
             }
-
-            /*Fragment fragment = new NewsFragment();
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
-            ft.replace(R.id.main_frame_container, fragment);
-            ft.commit();*/
         } else {
             menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle("Login");
@@ -196,7 +189,6 @@ public class MainActivity extends AppCompatActivity
         //replacing the fragment
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            // ft.addToBackStack(null); //uncomment to enable backpress to return to previous fragment
             ft.replace(R.id.main_frame_container, fragment);
             ft.commit();
         }

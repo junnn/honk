@@ -39,7 +39,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bookmark bookmark = mData.get(position);
         holder.myTextView.setText(bookmark.getName());
-        //holder.favIB.setImageResource(R.drawable.favstar);
     }
 
     // total number of rows
