@@ -22,29 +22,23 @@ import bloop.honk.View.NewsAdapter;
  */
 
 public class NewsManager {
-    //private static final String URL = "https://www.lta.gov.sg/apps/news/feed.aspx?svc=getnews&contenttype=rss&count=20&category=1&category=2&category=3";
 
     private static List<News> newsList = new ArrayList<>();
-
-    public static List<News> getNewsList() {
-        return newsList;
+   
+    public void fetchNews(final RecyclerView recyclerView, final Activity activity, final NewsAdapter adapter){
+        new DownloadXmlTask(activity, adapter, recyclerView).execute(Config.NEWS_URL);
     }
-
-    private Context context;
-
-    public NewsManager(Context context) {
-        this.context = context;
-    }
-
 
     public static class DownloadXmlTask extends AsyncTask<String, Void, String> {
 
         private Context context;
         private NewsAdapter newsAdapter;
+        private recyclerView recycler;
 
-        public DownloadXmlTask(Context context, NewsAdapter newsAdapter) {
+        public DownloadXmlTask(Context context, NewsAdapter newsAdapter, RecyclerView, recyclerView) {
             this.context = context;
             this.newsAdapter = newsAdapter;
+            this.recycler = recyclerView;
         }
 
         @Override
@@ -61,6 +55,7 @@ public class NewsManager {
         @Override
         protected void onPostExecute(String result) {
             newsAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(newsAdapter);
         }
     }
 
